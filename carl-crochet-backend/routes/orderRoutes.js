@@ -4,7 +4,7 @@ import { createOrder, getOrders, getOrderById } from "../controllers/orderContro
 const router = express.Router();
 
 router.post("/", createOrder);
-router.get("/", getOrders);       // ✅ no email required
+router.get("/", getOrders);
 router.get("/:id", getOrderById);
 
 export default router;

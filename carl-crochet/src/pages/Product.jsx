@@ -122,7 +122,7 @@ const Product = () => {
             <p>{productData.description}</p>
           ) : (
             <div className="space-y-4">
-              {/* Example static reviews — later can be fetched from backend */}
+              {/* Example static reviews */}
               <div>
                 <p className="font-medium">John D.</p>
                 <p>Great product! Exactly as described.</p>
