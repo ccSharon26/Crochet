@@ -1,88 +1,65 @@
-import { useContext, useState } from "react";
-import { ShopContext } from "../context/ShopContext";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
+import { useAuth } from "../context/AuthContext.jsx";
 
 const Login = () => {
-  const { loginUser } = useContext(ShopContext);
-  const [isSignIn, setIsSignIn] = useState(true);
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [form, setForm] = useState({ email: "", password: "" });
+  const [error, setError] = useState("");
   const navigate = useNavigate();
+  const { setUser } = useAuth(); // update Auth context
 
-  const handleSubmit = (e) => {
+  const handleChange = (e) => {
+    setForm({ ...form, [e.target.name]: e.target.value });
+  };
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
+    setError("");
 
-    if (!email || !password || (isSignIn && !name)) {
-      alert("Please fill all required fields");
-      return;
+    try {
+      const res = await axios.post("http://localhost:5000/api/auth/login", form);
+
+      // Save JWT and update Auth context
+      localStorage.setItem("token", res.data.token);
+      localStorage.setItem("user", JSON.stringify(res.data.user));
+      setUser(res.data.user);
+
+      navigate("/"); // redirect to homepage
+    } catch (err) {
+      console.error(err);
+      setError(err.response?.data?.message || "Login failed");
     }
-
-    loginUser(name, email);
-
-
-    navigate("/profile");
   };
 
   return (
-    <div className="flex justify-center items-center h-[70vh]">
-      <form
-        onSubmit={handleSubmit}
-        className="w-full max-w-sm bg-white shadow-md rounded-lg p-6 space-y-4"
-      >
-
-        <div className="flex justify-around mb-4">
-          <button
-            type="button"
-            className={`px-4 py-2 rounded-md ${
-              isSignIn ? "bg-pink-600 text-white" : "bg-gray-200"
-            }`}
-            onClick={() => setIsSignIn(true)}
-          >
-            Sign In
-          </button>
-          <button
-            type="button"
-            className={`px-4 py-2 rounded-md ${
-              !isSignIn ? "bg-pink-600 text-white" : "bg-gray-200"
-            }`}
-            onClick={() => setIsSignIn(false)}
-          >
-            Log In
-          </button>
-        </div>
-
-        {isSignIn && (
-          <input
-            type="text"
-            placeholder="Your name"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-            className="w-full px-3 py-2 border rounded-md"
-          />
-        )}
-
+    <div className="max-w-md mx-auto p-6 bg-white rounded-xl shadow-md mt-10">
+      <h2 className="text-2xl font-bold mb-4">Login</h2>
+      {error && <p className="text-red-500 mb-2">{error}</p>}
+      <form onSubmit={handleSubmit} className="flex flex-col gap-4">
         <input
           type="email"
-          placeholder="Your email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          className="w-full px-3 py-2 border rounded-md"
+          name="email"
+          value={form.email}
+          onChange={handleChange}
+          placeholder="Email"
+          className="border p-2 rounded"
+          required
         />
-
         <input
           type="password"
-          placeholder="Your password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          className="w-full px-3 py-2 border rounded-md"
+          name="password"
+          value={form.password}
+          onChange={handleChange}
+          placeholder="Password"
+          className="border p-2 rounded"
+          required
         />
-
         <button
           type="submit"
-          className="w-full bg-pink-600 text-white py-2 rounded-md hover:bg-pink-700 transition"
+          className="bg-pink-500 text-white py-2 rounded hover:bg-pink-600 transition"
         >
-          {isSignIn ? "Sign In" : "Log In"}
+          Login
         </button>
       </form>
     </div>

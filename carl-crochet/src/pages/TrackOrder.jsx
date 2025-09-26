@@ -43,7 +43,7 @@ const TrackOrder = () => {
       <div className="mt-6 border rounded-md shadow-sm bg-white p-6 space-y-6">
         {/* Order Info */}
         <div>
-          <p className="font-semibold text-lg">Order ID: {order._id}</p>
+          <p className="font-semibold text-lg">Order ID: {order.id}</p>
           <p className="text-sm text-gray-600">
             Placed on {new Date(order.date).toLocaleString()}
           </p>

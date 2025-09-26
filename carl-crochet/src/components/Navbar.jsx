@@ -1,17 +1,28 @@
 import { useContext, useState } from "react";
-import { Link, NavLink } from "react-router-dom";
+import { Link, NavLink, useNavigate } from "react-router-dom";
 import { assets } from "../assets/frontend_assets/assets";
-import { ShopContext } from "../context/ShopContext";
+import { ShopContext } from "../context/ShopContext.jsx";
+import { useAuth } from "../context/AuthContext.jsx";
 
 const Navbar = () => {
   const [visible, setVisible] = useState(false);
-  const { setShowSearch, getCartCount } = useContext(ShopContext);
+  const { getCartCount } = useContext(ShopContext);
+  const { user, setUser } = useAuth();
+  const navigate = useNavigate();
 
   const navLinkStyle =
     "relative flex flex-col items-center gap-1 text-gray-700 hover:text-pink-500 transition duration-300";
 
+  // Logout helper
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    localStorage.removeItem("user");
+    setUser(null);
+    navigate("/"); 
+  };
+
   return (
-    <div className="flex items-center justify-between py-5 px-6 font-medium bg-gradient-to-r from-pink-50 via-white to-pink-50 shadow-sm">
+    <div className="flex items-center justify-between py-5 px-6 font-medium bg-gradient-to-r from-pink-50 via-white to-pink-50">
       <Link to="/">
         <h1 className="font-bold text-2xl text-pink-600">CarlCrochet</h1>
       </Link>
@@ -23,7 +34,6 @@ const Navbar = () => {
           return (
             <NavLink key={path} to={path} className={navLinkStyle}>
               <p>{labels[i]}</p>
-              <span className="absolute bottom-0 left-0 w-0 h-[2px] bg-pink-400 transition-all duration-300 group-hover:w-full"></span>
             </NavLink>
           );
         })}
@@ -38,30 +48,36 @@ const Navbar = () => {
             className="w-6 cursor-pointer hover:scale-110 transition"
             alt="profile icon"
           />
-
           <div className="group-hover:block hidden absolute dropdown-menu right-0 pt-4">
             <div className="flex flex-col gap-2 w-40 px-3 py-5 bg-white shadow-lg border rounded-xl text-gray-600">
-              <Link
-                to="/profile"
-                className="cursor-pointer hover:text-pink-500"
-              >
-                My Profile
-              </Link>
-              <Link
-                to="/orders"
-                className="cursor-pointer hover:text-pink-500"
-              >
-                Orders
-              </Link>
-              <button
-                onClick={() => {
-                  localStorage.removeItem("user");
-                  window.location.href = "/login"; 
-                }}
-                className="text-left hover:text-pink-500"
-              >
-                Logout
-              </button>
+              {user ? (
+                <>
+                  <Link to="/profile" className="hover:text-pink-500">
+                    My Profile
+                  </Link>
+                  <Link to="/orders" className="hover:text-pink-500">
+                    Orders
+                  </Link>
+                  <button
+                    onClick={handleLogout}
+                    className="text-left hover:text-pink-500"
+                  >
+                    Logout
+                  </button>
+                </>
+              ) : (
+                <>
+                  <Link to="/login" className="hover:text-pink-500">
+                    Login
+                  </Link>
+                  <Link to="/signup" className="hover:text-pink-500">
+                    Sign Up
+                  </Link>
+                  <Link to="/orders" className="hover:text-pink-500">
+                    Orders
+                  </Link>
+                </>
+              )}
             </div>
           </div>
         </div>
@@ -78,6 +94,15 @@ const Navbar = () => {
           </p>
         </Link>
 
+        {/* Admin Dashboard Button */}
+        <Link to="/admin" className="relative">
+          <img
+            src={assets.bin_icon}
+            className="w-6 hover:scale-110 transition"
+            alt="admin dashboard icon"
+          />
+        </Link>
+
         {/* Mobile Menu Button */}
         <img
           onClick={() => setVisible(true)}
@@ -87,7 +112,7 @@ const Navbar = () => {
         />
       </div>
 
-      {/* Small Screen Menu */}
+      {/* Mobile Menu */}
       <div
         className={`absolute top-0 right-0 bottom-0 overflow-hidden bg-white shadow-lg transition-all ${
           visible ? "w-3/4" : "w-0"
@@ -105,6 +130,7 @@ const Navbar = () => {
             />
             <p>Back</p>
           </div>
+
           {["/", "/collection", "/about", "/contact"].map((path, i) => {
             const labels = ["HOME", "COLLECTION", "ABOUT", "CONTACT"];
             return (
@@ -118,6 +144,60 @@ const Navbar = () => {
               </NavLink>
             );
           })}
+
+          <div className="flex flex-col gap-2 mt-4 pl-10">
+            {user ? (
+              <>
+                <Link
+                  to="/profile"
+                  onClick={() => setVisible(false)}
+                  className="hover:text-pink-500"
+                >
+                  My Profile
+                </Link>
+                <Link
+                  to="/orders"
+                  onClick={() => setVisible(false)}
+                  className="hover:text-pink-500"
+                >
+                  Orders
+                </Link>
+                <button
+                  onClick={() => {
+                    handleLogout();
+                    setVisible(false);
+                  }}
+                  className="text-left hover:text-pink-500"
+                >
+                  Logout
+                </button>
+              </>
+            ) : (
+              <>
+                <Link
+                  to="/login"
+                  onClick={() => setVisible(false)}
+                  className="hover:text-pink-500"
+                >
+                  Login
+                </Link>
+                <Link
+                  to="/signup"
+                  onClick={() => setVisible(false)}
+                  className="hover:text-pink-500"
+                >
+                  Sign Up
+                </Link>
+                <Link
+                  to="/orders"
+                  onClick={() => setVisible(false)}
+                  className="hover:text-pink-500"
+                >
+                  Orders
+                </Link>
+              </>
+            )}
+          </div>
         </div>
       </div>
     </div>

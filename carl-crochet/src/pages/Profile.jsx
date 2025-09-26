@@ -1,63 +1,125 @@
-import { useContext, useEffect, useState } from "react";
-import { ShopContext } from "../context/ShopContext";
-import { Navigate, Link } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 const Profile = () => {
-  const { user, logoutUser, currency } = useContext(ShopContext);
-  const [orders, setOrders] = useState([]);
+  const navigate = useNavigate();
+  const token = localStorage.getItem("token");
+  const storedUser = JSON.parse(localStorage.getItem("user")) || { name: "", email: "" };
+  
+  const [user, setUser] = useState(storedUser);
+  const [editMode, setEditMode] = useState(false);
 
   useEffect(() => {
-    if (user?.email) {
-      fetch(`http://localhost:5000/api/orders?email=${user.email}`)
-        .then((res) => res.json())
-        .then((data) => setOrders(data))
-        .catch((err) => console.error("Error fetching orders:", err));
+    if (!token) {
+      navigate("/login");
+      return;
     }
-  }, [user]);
 
-  if (!user) return <Navigate to="/login" />;
+    const fetchProfile = async () => {
+      try {
+        const res = await fetch("http://localhost:5000/api/auth/profile", {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        if (!res.ok) throw new Error("Failed to fetch profile");
+        const data = await res.json();
+        setUser({ name: data.name, email: data.email });
+        localStorage.setItem("user", JSON.stringify(data)); 
+      } catch (err) {
+        console.error(err);
+        navigate("/login");
+      }
+    };
+
+    fetchProfile();
+  }, [navigate, token]);
+
+  const handleChange = (e) => {
+    setUser({ ...user, [e.target.name]: e.target.value });
+  };
+
+  const handleSave = async () => {
+    try {
+      const res = await fetch("http://localhost:5000/api/auth/profile", {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(user),
+      });
+      const data = await res.json();
+      if (res.ok) {
+        setUser({ name: data.name, email: data.email });
+        localStorage.setItem("user", JSON.stringify(data));
+        setEditMode(false);
+        alert("Profile updated successfully!");
+      } else {
+        alert(data.message || "Failed to update profile");
+      }
+    } catch (err) {
+      console.error(err);
+      alert("Server error. Try again.");
+    }
+  };
 
   return (
-    <div className="p-6">
-      <h2 className="text-2xl font-semibold mb-4">My Profile</h2>
-      <p><span className="font-medium">Name:</span> {user.name}</p>
-      <p><span className="font-medium">Email:</span> {user.email}</p>
-
-      {/* Orders Section */}
-      <div className="mt-6">
-        <h3 className="text-xl font-semibold mb-2">My Orders</h3>
-        {orders.length === 0 ? (
-          <p className="text-gray-500">No orders yet. Place your first order!</p>
-        ) : (
-          <div className="space-y-4">
-            {orders.map((order) => (
-              <div key={order._id} className="border p-4 rounded-md shadow-sm">
-                <p>
-                  <span className="font-medium">Order ID:</span> {order._id}
-                </p>
-                <p>Status: {order.status}</p>
-                <p>
-                  Total: {currency}
-                  {order.total}
-                </p>
-                <Link
-                  to={`/track-order/${order._id}`}
-                  className="text-pink-600 hover:underline"
-                >
-                  Track Order →
-                </Link>
-              </div>
-            ))}
-          </div>
-        )}
+    <div className="flex justify-center items-center min-h-screen bg-pink-50">
+      <div className="bg-white p-8 rounded-xl shadow-md w-full max-w-md">
+        <h2 className="text-2xl font-bold mb-6 text-pink-600 text-center">My Profile</h2>
+        <div className="mb-4">
+          <label className="block mb-2 font-medium">Name:</label>
+          {editMode ? (
+            <input
+              type="text"
+              name="name"
+              value={user.name}
+              onChange={handleChange}
+              className="w-full p-2 border rounded"
+            />
+          ) : (
+            <p className="p-2 border rounded">{user.name}</p>
+          )}
+        </div>
+        <div className="mb-4">
+          <label className="block mb-2 font-medium">Email:</label>
+          {editMode ? (
+            <input
+              type="email"
+              name="email"
+              value={user.email}
+              onChange={handleChange}
+              className="w-full p-2 border rounded"
+            />
+          ) : (
+            <p className="p-2 border rounded">{user.email}</p>
+          )}
+        </div>
+        <div className="flex justify-between">
+          {editMode ? (
+            <>
+              <button
+                onClick={handleSave}
+                className="bg-pink-600 text-white py-2 px-4 rounded hover:bg-pink-500 transition"
+              >
+                Save
+              </button>
+              <button
+                onClick={() => setEditMode(false)}
+                className="bg-gray-300 text-gray-700 py-2 px-4 rounded hover:bg-gray-200 transition"
+              >
+                Cancel
+              </button>
+            </>
+          ) : (
+            <button
+              onClick={() => setEditMode(true)}
+              className="bg-pink-600 text-white py-2 px-4 rounded hover:bg-pink-500 transition"
+            >
+              Edit Profile
+            </button>
+          )}
+        </div>
       </div>
-
-      <button
-        onClick={logoutUser}
-        className="mt-6 px-4 py-2 bg-gray-200 rounded-md hover:bg-gray-300"
-      >
-        Logout
-      </button>
     </div>
   );
 };

@@ -1,10 +1,43 @@
-import { useContext } from "react";
+// Orders.jsx
+import { useContext, useEffect, useState } from "react";
 import { ShopContext } from "../context/ShopContext";
 import Title from "../components/Title";
 import { Link } from "react-router-dom";
 
 const Orders = () => {
-  const { orders, currency, products } = useContext(ShopContext);
+  const { currency, products } = useContext(ShopContext);
+  const [orders, setOrders] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  // 🆕 Fetch orders from backend
+  useEffect(() => {
+    const fetchOrders = async () => {
+      try {
+        const res = await fetch("http://localhost:5000/api/orders");
+        const data = await res.json();
+
+        if (res.ok) {
+          setOrders(data); // ✅ set orders from backend
+        } else {
+          console.error("Failed to fetch orders:", data.message);
+        }
+      } catch (err) {
+        console.error("Error fetching orders:", err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchOrders();
+  }, []);
+
+  if (loading) {
+    return (
+      <div className="p-6 text-center">
+        <p className="text-gray-500">Loading orders...</p>
+      </div>
+    );
+  }
 
   if (orders.length === 0) {
     return (
@@ -28,7 +61,7 @@ const Orders = () => {
             className="py-6 border-t border-b text-gray-700 flex flex-col gap-6"
           >
             <div className="flex items-start gap-6 text-sm">
-            
+              {/* Show first product in the order */}
               {Object.keys(order.items).length > 0 && (
                 <img
                   className="w-16 sm:w-20"
@@ -42,7 +75,7 @@ const Orders = () => {
               )}
               <div>
                 <p className="text-base font-medium">
-                  {order.customer.name} ({order.customer.phone})
+                  {order.customer?.name} ({order.customer?.phone})
                 </p>
                 <div className="flex items-center gap-3 mt-2 text-base text-gray-700">
                   <p className="text-lg">
@@ -52,6 +85,12 @@ const Orders = () => {
                   <p>Payment: {order.payment}</p>
                 </div>
                 <p className="mt-2">
+                  Date:{" "}
+                  <span className="text-gray-500 font-medium">
+                    {new Date(order.date).toLocaleDateString()}
+                  </span>
+                </p>
+                <p className="mt-1">
                   Status:{" "}
                   <span
                     className={`font-semibold ${
@@ -67,18 +106,12 @@ const Orders = () => {
                     {order.status}
                   </span>
                 </p>
-                <p className="mt-1">
-                  Date:{" "}
-                  <span className="text-gray-500 font-medium">
-                    {order.date}
-                  </span>
-                </p>
               </div>
             </div>
 
             {/* Track Button */}
             <div className="flex justify-end">
-              <Link to={`/track-order/${order._id}`}>
+              <Link to={`/track-order/${order.id}`}>
                 <button className="border px-4 py-2 text-sm font-medium rounded-sm hover:bg-gray-100">
                   Track Order
                 </button>

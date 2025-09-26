@@ -12,6 +12,9 @@ import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
 import SearchBar from "./components/SearchBar";
 import TrackOrder from "./pages/TrackOrder";
+import SignUp from "./pages/SignUp";
+import Profile from "./pages/Profile";
+import AdminDashboard from "./pages/AdminDashboard.jsx";
 
 function App() {
   return (
@@ -26,9 +29,13 @@ function App() {
         <Route path="/product/:productId" element={<Product />} />
         <Route path="/cart" element={<Cart />} />
         <Route path="/login" element={<Login />} />
+        <Route path="/signup" element={<SignUp />} />
         <Route path="/place-order" element={<PlaceOrder />} />
         <Route path="/orders" element={<Orders />} />
         <Route path="/track-order/:id" element={<TrackOrder />} />
+        <Route path="/profile" element={<Profile />} />
+        <Route path="/admin" element={<AdminDashboard />} />
+        <Route path="/admin" element={<AdminDashboard />} />
       </Routes>
       <Footer />
     </div>
