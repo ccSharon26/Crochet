@@ -3,6 +3,7 @@
   "private": true,
   "version": "0.0.0",
   "type": "module",
+  "homepage": "https://ccSharon26.github.io/Crochet",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
