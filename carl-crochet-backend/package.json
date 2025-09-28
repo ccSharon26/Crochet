@@ -4,8 +4,7 @@
   "main": "server.js",
   "type": "module",
   "scripts": {
-    "start": "node server.js",
-    "build": "echo 'No build step needed'"
+    "start": "node server.js"
   },
   "dependencies": {
     "bcryptjs": "^3.0.2",
