@@ -6,13 +6,18 @@ const orderSchema = new mongoose.Schema({
     name: String,
     email: String,
     phone: String,
+    county: String,   // ✅ added county
     address: String,
+  },
+  delivery: {
+    name: String,     // ✅ pickup agent name
+    fee: Number,      // ✅ pickup agent fee
   },
   total: { type: Number, required: true },
   payment: { type: String, default: "Cash on Delivery" },
   status: {
     type: String,
-    enum: ["Pending", "Processing", "Shipped", "Delivered"],
+    enum: ["Pending", "Processing", "Shipped", "Delivered", "Cancelled"], // ✅ added Cancelled (frontend uses it in AdminDashboard)
     default: "Pending",
   },
   date: { type: Date, default: Date.now },

@@ -1,6 +1,5 @@
 import { useContext, useState } from "react";
 import { Link, NavLink, useNavigate } from "react-router-dom";
-import { assets } from "../assets/frontend_assets/assets";
 import { ShopContext } from "../context/ShopContext.jsx";
 import { useAuth } from "../context/AuthContext.jsx";
 
@@ -18,7 +17,7 @@ const Navbar = () => {
     localStorage.removeItem("token");
     localStorage.removeItem("user");
     setUser(null);
-    navigate("/"); 
+    navigate("/");
   };
 
   return (
@@ -44,7 +43,7 @@ const Navbar = () => {
         {/* Profile Dropdown */}
         <div className="group relative">
           <img
-            src={assets.profile_icon}
+            src="/frontend_assets/profile_icon.png"
             className="w-6 cursor-pointer hover:scale-110 transition"
             alt="profile icon"
           />
@@ -85,7 +84,7 @@ const Navbar = () => {
         {/* Cart */}
         <Link to="/cart" className="relative">
           <img
-            src={assets.cart_icon}
+            src="/frontend_assets/cart_icon.png"
             className="w-6 min-w-6 hover:scale-110 transition"
             alt="cart icon"
           />
@@ -97,7 +96,7 @@ const Navbar = () => {
         {/* Admin Dashboard Button */}
         <Link to="/admin" className="relative">
           <img
-            src={assets.bin_icon}
+            src="/frontend_assets/bin_icon.png"
             className="w-6 hover:scale-110 transition"
             alt="admin dashboard icon"
           />
@@ -106,7 +105,7 @@ const Navbar = () => {
         {/* Mobile Menu Button */}
         <img
           onClick={() => setVisible(true)}
-          src={assets.menu_icon}
+          src="/frontend_assets/menu_icon.png"
           alt="menu-icon"
           className="w-6 cursor-pointer sm:hidden"
         />
@@ -124,7 +123,7 @@ const Navbar = () => {
             className="flex items-center cursor-pointer gap-4 p-4 border-b"
           >
             <img
-              src={assets.dropdown_icon}
+              src="/frontend_assets/dropdown_icon.png"
               alt="close-menu-icon"
               className="h-4 rotate-180"
             />

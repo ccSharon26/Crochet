@@ -3,21 +3,21 @@ import { useContext, useEffect, useState } from "react";
 import { ShopContext } from "../context/ShopContext";
 import Title from "../components/Title";
 import { Link } from "react-router-dom";
+import API_BASE_URL from "../api.js";
 
 const Orders = () => {
   const { currency, products } = useContext(ShopContext);
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  // 🆕 Fetch orders from backend
   useEffect(() => {
     const fetchOrders = async () => {
       try {
-        const res = await fetch("http://localhost:5000/api/orders");
+        const res = await fetch(`${API_BASE_URL}/api/orders`);
         const data = await res.json();
 
         if (res.ok) {
-          setOrders(data); // ✅ set orders from backend
+          setOrders(data);
         } else {
           console.error("Failed to fetch orders:", data.message);
         }
@@ -66,9 +66,8 @@ const Orders = () => {
                 <img
                   className="w-16 sm:w-20"
                   src={
-                    products.find(
-                      (p) => p._id === Object.keys(order.items)[0]
-                    )?.image[0]
+                    products.find((p) => p._id === Object.keys(order.items)[0])
+                      ?.image
                   }
                   alt="order item"
                 />

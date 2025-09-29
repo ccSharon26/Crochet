@@ -1,7 +1,6 @@
 import { useContext, useEffect, useState } from "react";
 import { ShopContext } from "../context/ShopContext";
 import Title from "../components/Title";
-import { assets } from "../assets/frontend_assets/assets";
 import CartTotal from "../components/CartTotal";
 
 const Cart = () => {
@@ -45,9 +44,10 @@ const Cart = () => {
               <div className="flex items-start gap-6">
                 <img
                   className="w-16 sm:w-20"
-                  src={productData.image[0]}
+                  src={productData.image}
                   alt="product-image"
                 />
+
                 <div>
                   <p className="text-xs sm:text-lg font-medium">
                     {productData.name}
@@ -81,7 +81,7 @@ const Cart = () => {
               <img
                 onClick={() => updateQuantity(item._id, item.size, 0)}
                 className="w-4 mr-4 sm:w-5 cursor-pointer"
-                src={assets.bin_icon}
+                src="/frontend_assets/bin_icon.png"
                 alt="delete-item"
               />
             </div>

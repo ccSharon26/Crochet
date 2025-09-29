@@ -1,45 +1,39 @@
 import { useContext, useEffect, useState } from "react";
 import { ShopContext } from "../context/ShopContext";
-import Title from "./Title";
-import ProductItem from "./ProductItem";
+import ProductItem from "../components/ProductItem";
+import Title from "../components/Title";
 
 const LatestCollection = () => {
   const { products } = useContext(ShopContext);
-  const [latestProducts, setLatestProducts] = useState([]);
+  const [latest, setLatest] = useState([]);
 
+  // Auto-update latest products whenever products change
   useEffect(() => {
-    setLatestProducts(products.slice(0, 10));
+    const latestProducts = products.slice(-8); // show last 8
+    setLatest(latestProducts);
   }, [products]);
 
   return (
-    <div className="my-16 bg-gradient-to-b from-pink-50 via-white to-pink-50 rounded-2xl shadow-sm py-12">
-      {/* Heading */}
-      <div className="text-center mb-12">
-        <Title text1={"LATEST"} text2={"COLLECTION"} />
-        <p className="w-3/4 m-auto text-sm sm:text-base text-gray-600 mt-3">
-          Discover our newest handmade crochet pieces — soft, stylish, and made
-          with love for every occasion.
-        </p>
-      </div>
-
-      {/* Product Grid */}
-      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6 px-4 sm:px-8">
-        {latestProducts.map((item, index) => (
-          <div
-            key={index}
-            className="transform transition duration-300 hover:scale-105 hover:shadow-lg rounded-xl bg-white p-2"
-          >
+    <div className="my-10">
+      <Title text1="LATEST" text2="COLLECTION" />
+      <div className="grid grid-cols-2 sm:grid-cols-4 gap-6 mt-6">
+        {latest.length > 0 ? (
+          latest.map((item) => (
             <ProductItem
+              key={item._id}
               id={item._id}
-              image={item.image}
               name={item.name}
               price={item.price}
+              image={item.image}
             />
-          </div>
-        ))}
+          ))
+        ) : (
+          <p>No latest products</p>
+        )}
       </div>
     </div>
   );
 };
 
 export default LatestCollection;
+

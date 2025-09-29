@@ -1,17 +1,45 @@
-import { createContext, useState } from "react";
-import { products } from "../assets/frontend_assets/assets";
+import { createContext, useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import API_BASE_URL from "../api.js";
 
 export const ShopContext = createContext();
 
 const ShopContextProvider = (props) => {
   const currency = "Ksh.";
+  const [products, setProducts] = useState([]);
+  const [loading, setLoading] = useState(true); // ✅ global loading
   const [search, setSearch] = useState("");
   const [showSearch, setShowSearch] = useState(false);
   const [cartItems, setCartItems] = useState({});
   const [orders, setOrders] = useState([]);
   const navigate = useNavigate();
 
+  // ✅ fetch products from backend every 5 seconds
+  useEffect(() => {
+    const fetchProducts = async () => {
+      try {
+        setLoading(true); // 👈 start loading
+        const res = await fetch(`${API_BASE_URL}/api/products`);
+        const data = await res.json();
+        if (res.ok) {
+          setProducts(data);
+        } else {
+          console.error("Failed to fetch products:", data.message);
+        }
+      } catch (err) {
+        console.error("Error fetching products:", err);
+      } finally {
+        setLoading(false); // 👈 stop loading
+      }
+    };
+
+    fetchProducts(); // initial fetch
+    const interval = setInterval(fetchProducts, 5000); // fetch every 5 seconds
+
+    return () => clearInterval(interval); // cleanup
+  }, []);
+
+  // --- Delivery ---
   const pickupAgents = {
     nairobi: [
       { name: "Westlands Pickup", fee: 150 },
@@ -28,11 +56,9 @@ const ShopContextProvider = (props) => {
   const [userCounty, setUserCounty] = useState("");
   const [userAgent, setUserAgent] = useState(null);
 
-  const getDeliveryFee = () => {
-    if (!userAgent) return 0;
-    return userAgent.fee;
-  };
+  const getDeliveryFee = () => (!userAgent ? 0 : userAgent.fee);
 
+  // --- Cart ---
   const addToCart = (itemId, size) => {
     if (!size) {
       alert("Select Product Size");
@@ -78,6 +104,7 @@ const ShopContextProvider = (props) => {
     let totalAmount = 0;
     for (const items in cartItems) {
       let itemInfo = products.find((product) => product._id === items);
+      if (!itemInfo) continue;
       for (const item in cartItems[items]) {
         try {
           if (cartItems[items][item] > 0) {
@@ -91,6 +118,7 @@ const ShopContextProvider = (props) => {
     return totalAmount;
   };
 
+  // --- Orders ---
   const placeOrder = async (orderData) => {
     const orderPayload = {
       items: structuredClone(cartItems),
@@ -109,7 +137,7 @@ const ShopContextProvider = (props) => {
     };
 
     try {
-      const res = await fetch("http://localhost:5000/api/orders", {
+      const res = await fetch(`${API_BASE_URL}/api/orders`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(orderPayload),
@@ -118,9 +146,9 @@ const ShopContextProvider = (props) => {
       const data = await res.json();
 
       if (res.ok) {
-        setOrders((prev) => [...prev, data.order]); 
+        setOrders((prev) => [...prev, data.order]);
         setCartItems({});
-        navigate("/orders"); 
+        navigate("/orders");
       } else {
         alert(data.message || "Failed to place order");
       }
@@ -130,13 +158,12 @@ const ShopContextProvider = (props) => {
     }
   };
 
-
   const fetchOrdersByEmail = async (email) => {
     try {
-      const res = await fetch(`http://localhost:5000/api/orders?email=${email}`);
+      const res = await fetch(`${API_BASE_URL}/api/orders?email=${email}`);
       const data = await res.json();
       if (res.ok) {
-        setOrders(data); 
+        setOrders(data);
       } else {
         console.error("Failed to fetch orders:", data.message);
       }
@@ -145,8 +172,10 @@ const ShopContextProvider = (props) => {
     }
   };
 
+  // --- Context Value ---
   const value = {
     products,
+    loading, // ✅ shared globally
     currency,
     search,
     setSearch,

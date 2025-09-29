@@ -2,12 +2,13 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { useAuth } from "../context/AuthContext.jsx";
+import API_BASE_URL from "../api.js";
 
 const SignUp = () => {
   const [form, setForm] = useState({ name: "", email: "", password: "" });
   const [error, setError] = useState("");
   const navigate = useNavigate();
-  const { setUser } = useAuth(); // update Auth context
+  const { setUser } = useAuth();
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -18,21 +19,20 @@ const SignUp = () => {
     setError("");
 
     try {
-      // Register user
-      await axios.post("http://localhost:5000/api/auth/register", form);
+      // Register new user
+      await axios.post(`${API_BASE_URL}/api/auth/register`, form);
 
       // Auto-login after signup
-      const loginRes = await axios.post("http://localhost:5000/api/auth/login", {
+      const loginRes = await axios.post(`${API_BASE_URL}/api/auth/login`, {
         email: form.email,
         password: form.password,
       });
 
-      // Save JWT and update Auth context
       localStorage.setItem("token", loginRes.data.token);
       localStorage.setItem("user", JSON.stringify(loginRes.data.user));
       setUser(loginRes.data.user);
 
-      navigate("/"); // redirect to homepage
+      navigate("/");
     } catch (err) {
       console.error(err);
       setError(err.response?.data?.message || "Signup failed");
