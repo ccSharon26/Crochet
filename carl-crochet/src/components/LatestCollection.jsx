@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react"; 
 import { ShopContext } from "../context/ShopContext";
 import ProductItem from "../components/ProductItem";
 import Title from "../components/Title";
@@ -7,7 +7,6 @@ const LatestCollection = () => {
   const { products } = useContext(ShopContext);
   const [latest, setLatest] = useState([]);
 
-  
   useEffect(() => {
     const latestProducts = products.slice(-8);
     setLatest(latestProducts);
@@ -24,7 +23,7 @@ const LatestCollection = () => {
               id={item._id}
               name={item.name}
               price={item.price}
-              image={item.image}
+              image={`frontend_assets/${item.image}`}
             />
           ))
         ) : (
@@ -36,4 +35,3 @@ const LatestCollection = () => {
 };
 
 export default LatestCollection;
-

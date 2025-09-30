@@ -15,9 +15,7 @@ const Product = () => {
   const fetchProductData = () => {
     const product = products.find((item) => item._id === productId);
     if (product) {
-      const imagesArray = Array.isArray(product.image)
-        ? product.image
-        : [product.image];
+      const imagesArray = Array.isArray(product.image) ? product.image : [product.image];
       setProductData({ ...product, image: imagesArray });
       setImage(imagesArray[0]);
     }
@@ -38,7 +36,7 @@ const Product = () => {
             {productData.image.map((item, index) => (
               <img
                 onClick={() => setImage(item)}
-                src={item}
+                src={`frontend_assets/${item}`}
                 key={index}
                 alt="product-image"
                 className="w-[24%] sm:w-full sm:mb-3 flex-shrink-0 cursor-pointer"
@@ -46,7 +44,11 @@ const Product = () => {
             ))}
           </div>
           <div className="w-full sm:w-[80%]">
-            <img className="w-full h-auto" src={image} alt="image" />
+            <img
+              className="w-full h-auto"
+              src={image ? `${import.meta.env.BASE_URL}frontend_assets/${image}` : ""}
+              alt="image"
+            />
           </div>
         </div>
 
@@ -56,24 +58,24 @@ const Product = () => {
 
           <div className="flex items-center gap-1 mt-2">
             {[...Array(4)].map((_, i) => (
-              <img
-                key={i}
-                className="w-3.5"
-                src="/frontend_assets/star_icon.png"
-                alt="star"
-              />
+              <img key={i} className="w-3.5" src={`frontend_assets/star_icon.png`} alt="star" />
             ))}
-            <img
-              className="w-3.5"
-              src="/frontend_assets/star_dull_icon.png"
-              alt="star"
-            />
+            <img className="w-3.5" src={`frontend_assets/star_dull_icon.png`} alt="star" />
             <p className="pl-2">{122}</p>
           </div>
 
           <p className="mt-5 text-3xl font-medium">
             {currency}
             {productData.price}
+          </p>
+
+          {/* Stock Status */}
+          <p className="mt-2 text-sm font-medium">
+            {productData.inStock ? (
+              <span className="text-green-600">In Stock</span>
+            ) : (
+              <span className="text-red-600">Out of Stock</span>
+            )}
           </p>
 
           {/* Size Selection */}
@@ -85,9 +87,7 @@ const Product = () => {
                   onClick={() => setSize(item)}
                   key={index}
                   className={`border py-2 px-4 cursor-pointer ${
-                    item === size
-                      ? "border-orange-500 bg-gray-400"
-                      : "bg-gray-100"
+                    item === size ? "border-orange-500 bg-gray-400" : "bg-gray-100"
                   }`}
                 >
                   {item}
@@ -103,7 +103,7 @@ const Product = () => {
                 alert("Please select a size before adding to cart");
                 return;
               }
-              if (productData.inStock === false) { 
+              if (productData.inStock === false) {
                 alert("Sorry, this product is out of stock");
                 return;
               }
@@ -133,9 +133,7 @@ const Product = () => {
         <div className="flex border-b">
           <button
             className={`px-5 py-3 text-sm ${
-              activeTab === "description"
-                ? "border-b-2 border-black font-bold"
-                : ""
+              activeTab === "description" ? "border-b-2 border-black font-bold" : ""
             }`}
             onClick={() => setActiveTab("description")}
           >
@@ -147,7 +145,7 @@ const Product = () => {
             }`}
             onClick={() => setActiveTab("reviews")}
           >
-            Reviews ({122})
+            Reviews ({10})
           </button>
         </div>
 
@@ -167,10 +165,10 @@ const Product = () => {
               <div>
                 <textarea
                   placeholder="Write your review..."
-                  className="w-full border rounded-md p-2"
+                  className="w-full border p-2 rounded"
                 ></textarea>
-                <button className="mt-2 bg-black text-white px-4 py-2 rounded-sm text-sm">
-                  Submit Review
+                <button className="mt-2 bg-black text-white px-4 py-2 rounded">
+                  Submit
                 </button>
               </div>
             </div>
@@ -178,10 +176,8 @@ const Product = () => {
         </div>
       </div>
 
-      <RelatedProducts
-        category={productData.category}
-        subCategory={productData.subCategory}
-      />
+      {/* Related Products */}
+      <RelatedProducts category={productData.category} subCategory={productData.subCategory} />
     </div>
   );
 };

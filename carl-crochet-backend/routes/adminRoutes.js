@@ -3,23 +3,22 @@ import {
   getProducts,
   addProduct,
   deleteProduct,
-  updateProductStock,
-  updateProductSizes,
+  updateProduct,
   getOrders,
-  updateOrderStatus
+  updateOrderStatus,
 } from "../controllers/adminController.js";
+import { verifyToken } from "../middleware/authMiddleware.js";
 
 const router = express.Router();
 
 // Products
-router.get("/products", getProducts);
-router.post("/products", addProduct);
-router.delete("/products/:id", deleteProduct);
-router.put("/products/:id/stock", updateProductStock);
-router.put("/products/:id/sizes", updateProductSizes);
+router.get("/products", verifyToken, getProducts);
+router.post("/products", verifyToken, addProduct);
+router.put("/products/:id", verifyToken, updateProduct);
+router.delete("/products/:id", verifyToken, deleteProduct);
 
 // Orders
-router.get("/orders", getOrders);
-router.put("/orders/:id", updateOrderStatus);
+router.get("/orders", verifyToken, getOrders);
+router.put("/orders/:id/status", verifyToken, updateOrderStatus);
 
 export default router;

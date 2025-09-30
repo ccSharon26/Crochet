@@ -11,7 +11,6 @@ const Collection = () => {
   const [category, setCategory] = useState([]);
   const [subCategory, setSubCategory] = useState([]);
   const [sortType, setSortType] = useState("relevance");
-  const [loading, setLoading] = useState(true);
 
   // Toggle category selection
   const toggleCategory = (e) => {
@@ -44,13 +43,10 @@ const Collection = () => {
     }
 
     if (subCategory.length > 0) {
-      filtered = filtered.filter((item) =>
-        subCategory.includes(item.subCategory)
-      );
+      filtered = filtered.filter((item) => subCategory.includes(item.subCategory));
     }
 
     setFilterProducts(filtered);
-    setLoading(false); 
   };
 
   // Sort filtered products
@@ -61,16 +57,14 @@ const Collection = () => {
     setFilterProducts(sorted);
   };
 
+  // Apply filters whenever products or filters/search change
   useEffect(() => {
-    if (products.length > 0) {
-      applyFilter();
-    }
+    if (products.length > 0) applyFilter();
   }, [products, category, subCategory, search, showSearch]);
 
+  // Apply sorting whenever sort type changes
   useEffect(() => {
-    if (products.length > 0) {
-      sortProducts();
-    }
+    if (filterProducts.length > 0) sortProducts();
   }, [sortType]);
 
   return (
@@ -145,9 +139,7 @@ const Collection = () => {
           </select>
         </div>
 
-        {loading ? (
-          <p className="text-gray-500">Loading products...</p>
-        ) : filterProducts.length > 0 ? (
+        {filterProducts.length > 0 ? (
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 gap-y-6">
             {filterProducts.map((item) => (
               <ProductItem
@@ -155,7 +147,7 @@ const Collection = () => {
                 id={item._id}
                 name={item.name}
                 price={item.price}
-                image={item.image}
+                image={`frontend_assets/${item.image}`}
               />
             ))}
           </div>

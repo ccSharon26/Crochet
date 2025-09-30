@@ -25,6 +25,8 @@ const AdminDashboard = () => {
     inStock: true,
   });
 
+  const [productEdits, setProductEdits] = useState({});
+
   const token = localStorage.getItem("token");
 
   // Fetch products & orders
@@ -63,11 +65,15 @@ const AdminDashboard = () => {
         sizes: newProduct.sizes.map((s) => s.trim()),
         bestseller: Boolean(newProduct.bestseller),
         inStock: Boolean(newProduct.inStock),
-        image: newProduct.image.startsWith("frontend_assets/") ? newProduct.image : `frontend_assets/${newProduct.image}`
+        image: newProduct.image.trim(),
       };
-      const res = await axios.post(`${API_BASE_URL}/api/admin/products`, payload, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
+      const res = await axios.post(
+        `${API_BASE_URL}/api/admin/products`,
+        payload,
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
       setProducts([res.data, ...products]);
       setNewProduct({
         name: "",
@@ -86,18 +92,6 @@ const AdminDashboard = () => {
     }
   };
 
-  const handleUpdateProduct = async (id, updatedFields) => {
-    try {
-      const res = await axios.put(`${API_BASE_URL}/api/admin/products/${id}`, updatedFields, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-      setProducts(products.map((p) => (p._id === id ? res.data : p)));
-    } catch (err) {
-      console.error(err);
-      setError("Failed to update product. Please try again.");
-    }
-  };
-
   const handleDeleteProduct = async (id) => {
     try {
       await axios.delete(`${API_BASE_URL}/api/admin/products/${id}`, {
@@ -110,14 +104,37 @@ const AdminDashboard = () => {
     }
   };
 
-  // Update sizes & stock together
-  const handleProductChange = (product, field, value) => {
-    if (field === "sizes") {
-      const sizes = value.split(",").map((s) => s.trim());
-      handleUpdateProduct(product._id, { sizes });
-    }
-    if (field === "inStock") {
-      handleUpdateProduct(product._id, { inStock: value });
+  const handleProductEditChange = (id, field, value) => {
+    setProductEdits({
+      ...productEdits,
+      [id]: { ...productEdits[id], [field]: value },
+    });
+  };
+
+  const handleSaveProductEdits = async (id) => {
+    try {
+      const updates = productEdits[id];
+      if (!updates) return;
+
+      const payload = {
+        ...updates,
+        sizes: updates.sizes ? updates.sizes.map((s) => s.trim()) : undefined,
+        inStock: updates.inStock !== undefined ? updates.inStock : undefined,
+      };
+
+      const res = await axios.put(
+        `${API_BASE_URL}/api/admin/products/${id}`,
+        payload,
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
+
+      setProducts(products.map((p) => (p._id === id ? res.data : p)));
+      setProductEdits({ ...productEdits, [id]: {} });
+    } catch (err) {
+      console.error(err);
+      setError("Failed to update product. Please try again.");
     }
   };
 
@@ -125,13 +142,13 @@ const AdminDashboard = () => {
   const handleOrderStatusChange = async (orderId, status) => {
     try {
       const res = await axios.put(
-        `${API_BASE_URL}/api/admin/orders/${orderId}`,
+        `${API_BASE_URL}/api/admin/orders/${orderId}/status`,
         { status },
         { headers: { Authorization: `Bearer ${token}` } }
       );
       setOrders((prev) => prev.map((o) => (o._id === orderId ? res.data : o)));
     } catch (err) {
-      console.error(err);
+      console.error("Order update failed:", err.response?.data || err.message);
       setError("Failed to update order status. Please try again.");
     }
   };
@@ -173,28 +190,36 @@ const AdminDashboard = () => {
           type="text"
           placeholder="Name"
           value={newProduct.name}
-          onChange={(e) => setNewProduct({ ...newProduct, name: e.target.value })}
+          onChange={(e) =>
+            setNewProduct({ ...newProduct, name: e.target.value })
+          }
           className="border p-1 mr-2"
         />
         <input
           type="number"
           placeholder="Price"
           value={newProduct.price}
-          onChange={(e) => setNewProduct({ ...newProduct, price: e.target.value })}
+          onChange={(e) =>
+            setNewProduct({ ...newProduct, price: e.target.value })
+          }
           className="border p-1 mr-2"
         />
         <input
           type="text"
-          placeholder="Image"
+          placeholder="Image Filename"
           value={newProduct.image}
-          onChange={(e) => setNewProduct({ ...newProduct, image: e.target.value })}
+          onChange={(e) =>
+            setNewProduct({ ...newProduct, image: e.target.value })
+          }
           className="border p-1 mr-2"
         />
         <input
           type="text"
           placeholder="Description"
           value={newProduct.description}
-          onChange={(e) => setNewProduct({ ...newProduct, description: e.target.value })}
+          onChange={(e) =>
+            setNewProduct({ ...newProduct, description: e.target.value })
+          }
           className="border p-1 mr-2"
         />
         <input
@@ -208,7 +233,9 @@ const AdminDashboard = () => {
         />
         <select
           value={newProduct.category}
-          onChange={(e) => setNewProduct({ ...newProduct, category: e.target.value })}
+          onChange={(e) =>
+            setNewProduct({ ...newProduct, category: e.target.value })
+          }
           className="border p-1 mr-2"
         >
           <option value="Women">Women</option>
@@ -217,7 +244,9 @@ const AdminDashboard = () => {
         </select>
         <select
           value={newProduct.subCategory}
-          onChange={(e) => setNewProduct({ ...newProduct, subCategory: e.target.value })}
+          onChange={(e) =>
+            setNewProduct({ ...newProduct, subCategory: e.target.value })
+          }
           className="border p-1 mr-2"
         >
           <option value="Topwear">Topwear</option>
@@ -228,7 +257,9 @@ const AdminDashboard = () => {
           <input
             type="checkbox"
             checked={newProduct.bestseller}
-            onChange={(e) => setNewProduct({ ...newProduct, bestseller: e.target.checked })}
+            onChange={(e) =>
+              setNewProduct({ ...newProduct, bestseller: e.target.checked })
+            }
           />{" "}
           Bestseller
         </label>
@@ -236,7 +267,9 @@ const AdminDashboard = () => {
           <input
             type="checkbox"
             checked={newProduct.inStock}
-            onChange={(e) => setNewProduct({ ...newProduct, inStock: e.target.checked })}
+            onChange={(e) =>
+              setNewProduct({ ...newProduct, inStock: e.target.checked })
+            }
           />{" "}
           In Stock
         </label>
@@ -251,50 +284,81 @@ const AdminDashboard = () => {
       {/* Products List */}
       <div className="mb-6">
         <h2 className="text-xl font-semibold mb-2">Products</h2>
-        {products.map((p) => (
-          <div key={p._id} className="flex items-center gap-4 border-b py-2 justify-between">
-            <div className="flex items-center gap-4">
-              <img src={p.image} alt={p.name} className="w-12 h-12 object-cover rounded" />
-              <div>
-                <p>{p.name}</p>
-                <p>Ksh. {p.price}</p>
-                <p>{p.description}</p>
-                <p>
-                  Sizes:{" "}
-                  <input
-                    type="text"
-                    defaultValue={p.sizes.join(", ")}
-                    onBlur={(e) => handleProductChange(p, "sizes", e.target.value)}
-                    className="border p-1 text-sm"
-                  />
-                </p>
-                <p>
-                  In Stock:{" "}
-                  <input
-                    type="checkbox"
-                    checked={p.inStock}
-                    onChange={(e) => handleProductChange(p, "inStock", e.target.checked)}
-                  />
-                </p>
+        {products.map((p) => {
+          const edits = productEdits[p._id] || {};
+          return (
+            <div
+              key={p._id}
+              className="flex items-center gap-4 border-b py-2 justify-between"
+            >
+              <div className="flex items-center gap-4">
+                <img
+                  src={`frontend_assets/${p.image}`}
+                  alt={p.name}
+                  className="w-12 h-12 object-cover rounded"
+                />
+                <div>
+                  <p>{p.name}</p>
+                  <p>Ksh. {p.price}</p>
+                  <p>{p.description}</p>
+                  <p>
+                    Sizes:{" "}
+                    <input
+                      type="text"
+                      defaultValue={p.sizes.join(", ")}
+                      onChange={(e) =>
+                        handleProductEditChange(
+                          p._id,
+                          "sizes",
+                          e.target.value.split(",")
+                        )
+                      }
+                      className="border p-1 text-sm"
+                    />
+                  </p>
+                  <p>
+                    In Stock:{" "}
+                    <input
+                      type="checkbox"
+                      checked={edits.inStock ?? p.inStock}
+                      onChange={(e) =>
+                        handleProductEditChange(
+                          p._id,
+                          "inStock",
+                          e.target.checked
+                        )
+                      }
+                    />
+                  </p>
+                  <button
+                    onClick={() => handleSaveProductEdits(p._id)}
+                    className="bg-green-500 text-white px-2 py-1 rounded mt-1 hover:bg-green-600"
+                  >
+                    Save
+                  </button>
+                </div>
+              </div>
+              <div className="flex gap-2">
+                <button
+                  onClick={() => handleDeleteProduct(p._id)}
+                  className="bg-red-500 text-white px-2 py-1 rounded hover:bg-red-600"
+                >
+                  Delete
+                </button>
               </div>
             </div>
-            <div className="flex gap-2">
-              <button
-                onClick={() => handleDeleteProduct(p._id)}
-                className="bg-red-500 text-white px-2 py-1 rounded hover:bg-red-600"
-              >
-                Delete
-              </button>
-            </div>
-          </div>
-        ))}
+          );
+        })}
       </div>
 
       {/* Orders List */}
       <div>
         <h2 className="text-xl font-semibold mb-2">Orders</h2>
         {orders.map((o) => (
-          <div key={o._id} className="border-b py-2 flex justify-between items-center">
+          <div
+            key={o._id}
+            className="border-b py-2 flex justify-between items-center"
+          >
             <div>
               <p>
                 <strong>{o.customer?.name}</strong> ({o.customer?.email})

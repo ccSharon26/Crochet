@@ -23,7 +23,7 @@ const BestSeller = () => {
               id={item._id}
               name={item.name}
               price={item.price}
-              image={item.image}
+              image={`frontend_assets/${item.image}`}
             />
           ))
         ) : (

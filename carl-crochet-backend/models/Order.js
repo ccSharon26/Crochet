@@ -6,18 +6,18 @@ const orderSchema = new mongoose.Schema({
     name: String,
     email: String,
     phone: String,
-    county: String,   // ✅ added county
+    county: String, 
     address: String,
   },
   delivery: {
-    name: String,     // ✅ pickup agent name
-    fee: Number,      // ✅ pickup agent fee
+    name: String,     
+    fee: Number,   
   },
   total: { type: Number, required: true },
   payment: { type: String, default: "Cash on Delivery" },
   status: {
     type: String,
-    enum: ["Pending", "Processing", "Shipped", "Delivered", "Cancelled"], 
+    enum: ["Pending", "Processing", "Shipping", "Delivered", "Cancelled"], 
     default: "Pending",
   },
   date: { type: Date, default: Date.now },
@@ -28,7 +28,7 @@ orderSchema.set("toJSON", {
   versionKey: false,
   transform: (doc, ret) => {
     ret.id = ret._id;
-    delete ret._id;
+    delete ret._v;
   },
 });
 

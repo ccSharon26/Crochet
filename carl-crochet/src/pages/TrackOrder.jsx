@@ -2,6 +2,7 @@ import { useParams } from "react-router-dom";
 import { useContext, useEffect, useState } from "react";
 import { ShopContext } from "../context/ShopContext";
 import Title from "../components/Title";
+import API_BASE_URL from "../api.js";
 
 const TrackOrder = () => {
   const { id } = useParams();
@@ -11,7 +12,7 @@ const TrackOrder = () => {
   useEffect(() => {
     const fetchOrder = async () => {
       try {
-        const res = await fetch(`http://localhost:5000/api/orders/${id}`);
+        const res = await fetch(`${API_BASE_URL}/api/orders/${id}`);
         const data = await res.json();
         if (res.ok) {
           setOrder(data);
@@ -62,18 +63,27 @@ const TrackOrder = () => {
           <ul className="space-y-2 mt-2">
             {Object.keys(order.items).map((productId) => {
               const product = products.find((p) => p._id === productId);
-              const sizes = order.items[productId]; // e.g. { M: 1, L: 2 }
+              const sizes = order.items[productId]; 
 
               return Object.keys(sizes).map((size) => {
                 const qty = sizes[size];
                 return (
                   <li
                     key={`${productId}-${size}`}
-                    className="flex justify-between text-sm"
+                    className="flex justify-between items-center text-sm"
                   >
-                    <span>
-                      {product?.name || "Unknown Product"} ({size}) × {qty}
-                    </span>
+                    <div className="flex items-center gap-2">
+                      {product?.image && (
+                        <img
+                          className="w-12 h-12 object-cover rounded"
+                          src={`frontend_assets/${product.image}`}
+                          alt={product.name}
+                        />
+                      )}
+                      <span>
+                        {product?.name || "Unknown Product"} ({size}) × {qty}
+                      </span>
+                    </div>
                     <span>
                       {currency}
                       {product ? product.price * qty : 0}

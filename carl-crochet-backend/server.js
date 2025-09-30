@@ -7,15 +7,16 @@ import authRoutes from "./routes/authRoutes.js";
 import adminRoutes from "./routes/adminRoutes.js";
 import productRoutes from "./routes/productRoutes.js";
 
+
 dotenv.config();
 
 const app = express();
 
-// CORS setup
+// ===== CORS Setup =====
 const allowedOrigins = [
-  "http://localhost:3000",   // React default
-  "http://localhost:5173",  // Vite default
-  "https://ccsharon26.github.io/Crochet" // GitHub Pages project path
+  "http://localhost:3000", // React default
+  "http://localhost:5173", // Vite default
+  "https://ccsharon26.github.io/Crochet", // GitHub Pages
 ];
 
 app.use(
@@ -31,15 +32,17 @@ app.use(
   })
 );
 
+// ===== Middleware =====
 app.use(express.json());
 
-// Routes
+// ===== Routes =====
 app.use("/api/auth", authRoutes);
 app.use("/api/admin", adminRoutes);
 app.use("/api/orders", orderRoutes);
 app.use("/api/products", productRoutes);
+app.use("/api", orderRoutes);
 
-// MongoDB connection
+// ===== MongoDB Connection =====
 mongoose
   .connect(process.env.MONGO_URI, {
     useNewUrlParser: true,
@@ -48,11 +51,11 @@ mongoose
   .then(() => console.log("MongoDB connected"))
   .catch((err) => console.error("MongoDB connection error:", err));
 
-// Default route
+// ===== Default Route =====
 app.get("/", (req, res) => {
   res.send("Backend is running...");
 });
 
-// Start server
+// ===== Start Server =====
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));

@@ -37,41 +37,35 @@ export const deleteProduct = async (req, res) => {
   }
 };
 
-// Toggle stock
-export const updateProductStock = async (req, res) => {
+// Update product
+export const updateProduct = async (req, res) => {
   try {
-    const product = await Product.findByIdAndUpdate(
-      req.params.id,
-      { inStock: req.body.inStock },
+    const { id } = req.params;
+    const updatedProduct = await Product.findByIdAndUpdate(
+      id,
+      { $set: req.body },
       { new: true }
     );
-    res.json(product);
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ message: "Failed to update stock" });
+    res.json(updatedProduct);
+  } catch (error) {
+    console.error("Update error:", error);
+    res.status(500).json({ message: "Failed to update product" });
   }
 };
 
-// Update sizes
-export const updateProductSizes = async (req, res) => {
-  try {
-    const product = await Product.findByIdAndUpdate(
-      req.params.id,
-      { sizes: req.body.sizes },
-      { new: true }
-    );
-    res.json(product);
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ message: "Failed to update sizes" });
-  }
-};
+// ======== Orders ========
 
 // Get all orders
 export const getOrders = async (req, res) => {
   try {
-    const orders = await Order.find().populate("customer");
-    res.json(orders);
+    const orders = await Order.find();
+
+    const normalizedOrders = orders.map((order) => ({
+      ...order.toObject(),
+      id: order._id,
+    }));
+
+    res.json(normalizedOrders);
   } catch (err) {
     console.error(err);
     res.status(500).json({ message: "Failed to fetch orders" });
@@ -86,9 +80,14 @@ export const updateOrderStatus = async (req, res) => {
       { status: req.body.status },
       { new: true }
     );
+
+    if (!order) {
+      return res.status(404).json({ message: "Order not found" });
+    }
+
     res.json(order);
   } catch (err) {
-    console.error(err);
+    console.error("Update error:", err);
     res.status(500).json({ message: "Failed to update order status" });
   }
 };

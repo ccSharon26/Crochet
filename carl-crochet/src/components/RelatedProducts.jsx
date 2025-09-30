@@ -15,11 +15,9 @@ const RelatedProducts = ({ category, subCategory }) => {
         (item) => subCategory === item.subCategory
       );
 
-      console.log(productsCopy.slice(0, 5));
-
       setRelated(productsCopy.slice(0, 5));
     }
-  }, [products]);
+  }, [products, category, subCategory]);
 
   return (
     <div className="my-5">
@@ -31,7 +29,7 @@ const RelatedProducts = ({ category, subCategory }) => {
           <ProductItem
             key={index}
             id={item._id}
-            image={item.image}
+            image={`frontend_assets/${item.image}`}
             name={item.name}
             price={item.price}
           />

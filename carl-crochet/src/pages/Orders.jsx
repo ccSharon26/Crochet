@@ -7,7 +7,6 @@ import API_BASE_URL from "../api.js";
 const Orders = () => {
   const { currency, products } = useContext(ShopContext);
   const [orders, setOrders] = useState([]);
-  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchOrders = async () => {
@@ -22,21 +21,11 @@ const Orders = () => {
         }
       } catch (err) {
         console.error("Error fetching orders:", err);
-      } finally {
-        setLoading(false);
       }
     };
 
     fetchOrders();
   }, []);
-
-  if (loading) {
-    return (
-      <div className="p-6 text-center">
-        <p className="text-gray-500">Loading orders...</p>
-      </div>
-    );
-  }
 
   if (orders.length === 0) {
     return (
@@ -67,8 +56,17 @@ const Orders = () => {
                   src={
                     products.find((p) => p._id === Object.keys(order.items)[0])
                       ?.image
+                      ? `${import.meta.env.BASE_URL}frontend_assets/${
+                          products.find(
+                            (p) => p._id === Object.keys(order.items)[0]
+                          )?.image
+                        }`
+                      : ""
                   }
-                  alt="order item"
+                  alt={
+                    products.find((p) => p._id === Object.keys(order.items)[0])
+                      ?.name || "order item"
+                  }
                 />
               )}
               <div>
@@ -98,6 +96,10 @@ const Orders = () => {
                         ? "text-blue-600"
                         : order.status === "Shipped"
                         ? "text-purple-600"
+                        : order.status === "Delivered"
+                        ? "text-gray-600"
+                        : order.status === "Cancelled"
+                        ? "text-red-600"
                         : "text-green-600"
                     }`}
                   >

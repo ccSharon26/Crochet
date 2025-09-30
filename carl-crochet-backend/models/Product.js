@@ -11,7 +11,9 @@ const productSchema = new mongoose.Schema({
   sizes: {
     type: [String],
     default: ["S", "M", "L", "XL"], 
+   inStock: { type: Boolean, default: true },
   },
+  inStock: { type: Boolean, default: true },
 }, { timestamps: true });
 
 const Product = mongoose.model("Product", productSchema);
