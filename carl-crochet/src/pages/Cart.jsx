@@ -81,7 +81,7 @@ const Cart = () => {
               <img
                 onClick={() => updateQuantity(item._id, item.size, 0)}
                 className="w-4 mr-4 sm:w-5 cursor-pointer"
-                src="/frontend_assets/bin_icon.png"
+                src="frontend_assets/bin_icon.png"
                 alt="delete-item"
               />
             </div>

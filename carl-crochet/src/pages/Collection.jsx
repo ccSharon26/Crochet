@@ -11,7 +11,7 @@ const Collection = () => {
   const [category, setCategory] = useState([]);
   const [subCategory, setSubCategory] = useState([]);
   const [sortType, setSortType] = useState("relevance");
-  const [loading, setLoading] = useState(true); // 👈 Added loading state
+  const [loading, setLoading] = useState(true);
 
   // Toggle category selection
   const toggleCategory = (e) => {
@@ -50,7 +50,7 @@ const Collection = () => {
     }
 
     setFilterProducts(filtered);
-    setLoading(false); // 👈 stop loading once filtering is done
+    setLoading(false); 
   };
 
   // Sort filtered products
@@ -115,7 +115,7 @@ const Collection = () => {
         >
           <p className="mb-3 text-sm font-medium">TYPE</p>
           <div className="flex flex-col gap-2 text-sm font-light text-gray-700">
-            {["Topwear", "Bottomwear", "Winterwear"].map((sub) => (
+            {["Topwear", "Bottomwear", "Accessories"].map((sub) => (
               <label key={sub} className="flex gap-2">
                 <input
                   type="checkbox"
@@ -146,7 +146,7 @@ const Collection = () => {
         </div>
 
         {loading ? (
-          <p className="text-gray-500">Loading products...</p> // 👈 No more flicker
+          <p className="text-gray-500">Loading products...</p>
         ) : filterProducts.length > 0 ? (
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 gap-y-6">
             {filterProducts.map((item) => (

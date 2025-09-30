@@ -63,6 +63,7 @@ const AdminDashboard = () => {
         sizes: newProduct.sizes.map((s) => s.trim()),
         bestseller: Boolean(newProduct.bestseller),
         inStock: Boolean(newProduct.inStock),
+        image: newProduct.image.startsWith("frontend_assets/") ? newProduct.image : `frontend_assets/${newProduct.image}`
       };
       const res = await axios.post(`${API_BASE_URL}/api/admin/products`, payload, {
         headers: { Authorization: `Bearer ${token}` },

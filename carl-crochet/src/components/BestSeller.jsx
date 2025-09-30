@@ -7,7 +7,6 @@ const BestSeller = () => {
   const { products } = useContext(ShopContext);
   const [bestSellers, setBestSellers] = useState([]);
 
-  // Auto-update bestsellers whenever products change
   useEffect(() => {
     const filtered = products.filter(item => item.bestseller).slice(0, 4);
     setBestSellers(filtered);

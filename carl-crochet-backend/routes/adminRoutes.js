@@ -11,14 +11,14 @@ import {
 
 const router = express.Router();
 
-// ===== Products =====
+// Products
 router.get("/products", getProducts);
 router.post("/products", addProduct);
 router.delete("/products/:id", deleteProduct);
 router.put("/products/:id/stock", updateProductStock);
 router.put("/products/:id/sizes", updateProductSizes);
 
-// ===== Orders =====
+// Orders
 router.get("/orders", getOrders);
 router.put("/orders/:id", updateOrderStatus);
 

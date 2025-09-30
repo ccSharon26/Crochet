@@ -1,13 +1,12 @@
 import Order from "../models/Order.js";
 
-// ✅ Create order (works with your frontend payload)
+//  Create order 
 export const createOrder = async (req, res) => {
   try {
     const order = new Order({
       ...req.body,
       customer: {
         ...req.body.customer,
-        // keep your original logic: prefer token email if available, else frontend email
         email: req.user?.email || req.body.customer.email,
       },
     });
@@ -20,7 +19,7 @@ export const createOrder = async (req, res) => {
   }
 };
 
-// ✅ Get all orders (frontend uses email filter for history)
+//  Get all orders 
 export const getOrders = async (req, res) => {
   try {
     const { email } = req.query;
@@ -41,7 +40,7 @@ export const getOrders = async (req, res) => {
   }
 };
 
-// ✅ Get single order by ID
+// Get single order by ID
 export const getOrderById = async (req, res) => {
   try {
     const order = await Order.findById(req.params.id);

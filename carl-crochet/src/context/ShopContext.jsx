@@ -7,18 +7,18 @@ export const ShopContext = createContext();
 const ShopContextProvider = (props) => {
   const currency = "Ksh.";
   const [products, setProducts] = useState([]);
-  const [loading, setLoading] = useState(true); // ✅ global loading
+  const [loading, setLoading] = useState(true); 
   const [search, setSearch] = useState("");
   const [showSearch, setShowSearch] = useState(false);
   const [cartItems, setCartItems] = useState({});
   const [orders, setOrders] = useState([]);
   const navigate = useNavigate();
 
-  // ✅ fetch products from backend every 5 seconds
+  
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        setLoading(true); // 👈 start loading
+        setLoading(true);
         const res = await fetch(`${API_BASE_URL}/api/products`);
         const data = await res.json();
         if (res.ok) {
@@ -29,14 +29,14 @@ const ShopContextProvider = (props) => {
       } catch (err) {
         console.error("Error fetching products:", err);
       } finally {
-        setLoading(false); // 👈 stop loading
+        setLoading(false); 
       }
     };
 
-    fetchProducts(); // initial fetch
-    const interval = setInterval(fetchProducts, 5000); // fetch every 5 seconds
+    fetchProducts(); 
+    const interval = setInterval(fetchProducts, 5000); 
 
-    return () => clearInterval(interval); // cleanup
+    return () => clearInterval(interval);
   }, []);
 
   // --- Delivery ---
@@ -175,7 +175,7 @@ const ShopContextProvider = (props) => {
   // --- Context Value ---
   const value = {
     products,
-    loading, // ✅ shared globally
+    loading, 
     currency,
     search,
     setSearch,

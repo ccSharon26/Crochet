@@ -67,8 +67,6 @@ export const updateProductSizes = async (req, res) => {
   }
 };
 
-// ======== Orders ========
-
 // Get all orders
 export const getOrders = async (req, res) => {
   try {

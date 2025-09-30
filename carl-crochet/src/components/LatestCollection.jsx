@@ -7,9 +7,9 @@ const LatestCollection = () => {
   const { products } = useContext(ShopContext);
   const [latest, setLatest] = useState([]);
 
-  // Auto-update latest products whenever products change
+  
   useEffect(() => {
-    const latestProducts = products.slice(-8); // show last 8
+    const latestProducts = products.slice(-8);
     setLatest(latestProducts);
   }, [products]);
 

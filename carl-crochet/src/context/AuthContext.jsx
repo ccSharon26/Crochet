@@ -11,7 +11,7 @@ export const AuthProvider = ({ children }) => {
     }
   });
 
-  // Sync user with localStorage
+  
   useEffect(() => {
     if (user) {
       localStorage.setItem("user", JSON.stringify(user));

@@ -9,8 +9,8 @@ const productSchema = new mongoose.Schema({
   subCategory: { type: String, default: "Topwear" },
   bestseller: { type: Boolean, default: false },
   sizes: {
-    type: [String], // array of strings
-    default: ["S", "M", "L", "XL"], // optional default
+    type: [String],
+    default: ["S", "M", "L", "XL"], 
   },
 }, { timestamps: true });
 

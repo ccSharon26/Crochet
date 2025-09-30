@@ -17,7 +17,7 @@ const orderSchema = new mongoose.Schema({
   payment: { type: String, default: "Cash on Delivery" },
   status: {
     type: String,
-    enum: ["Pending", "Processing", "Shipped", "Delivered", "Cancelled"], // ✅ added Cancelled (frontend uses it in AdminDashboard)
+    enum: ["Pending", "Processing", "Shipped", "Delivered", "Cancelled"], 
     default: "Pending",
   },
   date: { type: Date, default: Date.now },

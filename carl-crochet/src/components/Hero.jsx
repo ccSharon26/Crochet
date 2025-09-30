@@ -5,7 +5,7 @@ const Hero = () => {
       {/* Left side - Image */}
       <div className="w-full sm:w-1/2">
         <img
-          src="/frontend_assets/hero_img.png" 
+          src="frontend_assets/hero_img.png" 
           className="w-full h-full object-cover hover:scale-105 transition-transform duration-500"
           alt="Carl Crochet Hero"
         />

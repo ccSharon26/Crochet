@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { useAuth } from "../context/AuthContext.jsx";
-import API_BASE_URL from "../api.js"; // 🔥 central import
+import API_BASE_URL from "../api.js";
 
 const Login = () => {
   const [form, setForm] = useState({ email: "", password: "" });
