@@ -7,26 +7,30 @@ import authRoutes from "./routes/authRoutes.js";
 import adminRoutes from "./routes/adminRoutes.js";
 import productRoutes from "./routes/productRoutes.js";
 
-
 dotenv.config();
 
 const app = express();
 
 // ===== CORS Setup =====
 const allowedOrigins = [
-  "http://localhost:3000", // React default
-  "http://localhost:5173", // Vite default
-  "https://ccsharon26.github.io/Crochet", // GitHub Pages
+  "http://localhost:3000",   // React default
+  "http://localhost:5173",   // Vite default
+  "https://ccsharon26.github.io",       // GH Pages base
+  "https://ccsharon26.github.io/Crochet" // GH Pages repo path
 ];
 
 app.use(
   cors({
-    origin: function (origin, callback) {
-      if (!origin || allowedOrigins.includes(origin)) {
-        callback(null, true);
-      } else {
-        callback(new Error("Not allowed by CORS"));
+    origin: (origin, callback) => {
+      // Allow requests with no origin (e.g., mobile apps, Postman)
+      if (!origin) return callback(null, true);
+
+      // Allow if origin starts with any allowed origin
+      if (allowedOrigins.some(o => origin.startsWith(o))) {
+        return callback(null, true);
       }
+
+      callback(new Error("Not allowed by CORS"));
     },
     credentials: true,
   })
@@ -40,7 +44,6 @@ app.use("/api/auth", authRoutes);
 app.use("/api/admin", adminRoutes);
 app.use("/api/orders", orderRoutes);
 app.use("/api/products", productRoutes);
-app.use("/api", orderRoutes);
 
 // ===== MongoDB Connection =====
 mongoose
