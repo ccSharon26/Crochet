@@ -8,33 +8,30 @@ import adminRoutes from "./routes/adminRoutes.js";
 import productRoutes from "./routes/productRoutes.js";
 
 dotenv.config();
-
 const app = express();
 
 // ===== CORS Setup =====
 const allowedOrigins = [
-  "http://localhost:3000",   // React default
-  "http://localhost:5173",   // Vite default
-  "https://ccsharon26.github.io",       // GH Pages base
-  "https://ccsharon26.github.io/Crochet" // GH Pages repo path
+  "http://localhost:3000",
+  "http://localhost:5173",
+  "https://ccsharon26.github.io",
+  "https://ccsharon26.github.io/Crochet",
 ];
 
-app.use(
-  cors({
-    origin: (origin, callback) => {
-      // Allow requests with no origin (e.g., mobile apps, Postman)
-      if (!origin) return callback(null, true);
+app.use(cors({
+  origin: function(origin, callback) {
+    // Allow requests with no origin (like Postman or server-to-server)
+    if (!origin) return callback(null, true);
 
-      // Allow if origin starts with any allowed origin
-      if (allowedOrigins.some(o => origin.startsWith(o))) {
-        return callback(null, true);
-      }
+    // Allow requests from GH Pages and localhosts
+    if (allowedOrigins.some(o => origin.startsWith(o))) {
+      return callback(null, true);
+    }
 
-      callback(new Error("Not allowed by CORS"));
-    },
-    credentials: true,
-  })
-);
+    callback(new Error(`Not allowed by CORS: ${origin}`));
+  },
+  credentials: true
+}));
 
 // ===== Middleware =====
 app.use(express.json());
@@ -52,12 +49,10 @@ mongoose
     useUnifiedTopology: true,
   })
   .then(() => console.log("MongoDB connected"))
-  .catch((err) => console.error("MongoDB connection error:", err));
+  .catch(err => console.error("MongoDB connection error:", err));
 
 // ===== Default Route =====
-app.get("/", (req, res) => {
-  res.send("Backend is running...");
-});
+app.get("/", (req, res) => res.send("Backend is running..."));
 
 // ===== Start Server =====
 const PORT = process.env.PORT || 5000;
