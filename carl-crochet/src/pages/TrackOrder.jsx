@@ -48,6 +48,12 @@ const TrackOrder = () => {
           <p className="text-sm text-gray-600">
             Placed on {new Date(order.date).toLocaleString()}
           </p>
+          {order.shippingDay && order.shippingDate && (
+            <p className="mt-1 text-sm text-gray-600">
+              Scheduled Shipping: {order.shippingDay},{" "}
+              {new Date(order.shippingDate).toLocaleDateString()}
+            </p>
+          )}
         </div>
 
         {/* Customer Info */}
@@ -63,7 +69,7 @@ const TrackOrder = () => {
           <ul className="space-y-2 mt-2">
             {Object.keys(order.items).map((productId) => {
               const product = products.find((p) => p._id === productId);
-              const sizes = order.items[productId]; 
+              const sizes = order.items[productId];
 
               return Object.keys(sizes).map((size) => {
                 const qty = sizes[size];

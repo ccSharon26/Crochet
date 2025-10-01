@@ -26,6 +26,7 @@ const AdminDashboard = () => {
   });
 
   const [productEdits, setProductEdits] = useState({});
+  const [orderEdits, setOrderEdits] = useState({});
 
   const token = localStorage.getItem("token");
 
@@ -139,14 +140,28 @@ const AdminDashboard = () => {
   };
 
   // ===== Order Actions =====
+  const handleOrderEdit = (orderId, field, value) => {
+    setOrderEdits({
+      ...orderEdits,
+      [orderId]: { ...orderEdits[orderId], [field]: value },
+    });
+  };
+
   const handleOrderStatusChange = async (orderId, status) => {
     try {
+      const edits = orderEdits[orderId] || {};
+      const payload = { status, ...edits };
+
       const res = await axios.put(
         `${API_BASE_URL}/api/admin/orders/${orderId}/status`,
-        { status },
-        { headers: { Authorization: `Bearer ${token}` } }
+        payload,
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
       );
+
       setOrders((prev) => prev.map((o) => (o._id === orderId ? res.data : o)));
+      setOrderEdits({ ...orderEdits, [orderId]: {} });
     } catch (err) {
       console.error("Order update failed:", err.response?.data || err.message);
       setError("Failed to update order status. Please try again.");
@@ -354,31 +369,106 @@ const AdminDashboard = () => {
       {/* Orders List */}
       <div>
         <h2 className="text-xl font-semibold mb-2">Orders</h2>
-        {orders.map((o) => (
-          <div
-            key={o._id}
-            className="border-b py-2 flex justify-between items-center"
-          >
-            <div>
-              <p>
-                <strong>{o.customer?.name}</strong> ({o.customer?.email})
-              </p>
-              <p>Total: Ksh. {o.total}</p>
-              <p>Status: {o.status}</p>
-            </div>
-            <select
-              value={o.status}
-              onChange={(e) => handleOrderStatusChange(o._id, e.target.value)}
-              className="border p-1 rounded"
+        {orders.map((o) => {
+          const edits = orderEdits[o._id] || {};
+          const isToBeShipped = (edits.status || o.status) === "To Be Shipped";
+          const isDelivered = (edits.status || o.status) === "Delivered";
+
+          return (
+            <div
+              key={o._id}
+              className="border-b py-2 flex flex-col md:flex-row justify-between items-start md:items-center gap-2"
             >
-              <option value="Pending">Pending</option>
-              <option value="Processing">Processing</option>
-              <option value="Shipped">Shipped</option>
-              <option value="Delivered">Delivered</option>
-              <option value="Cancelled">Cancelled</option>
-            </select>
-          </div>
-        ))}
+              <div>
+                <p>
+                  <strong>{o.customer?.name}</strong> ({o.customer?.email})
+                </p>
+                <p>Total: Ksh. {o.total}</p>
+                <p>
+                  Status:{" "}
+                  <span
+                    className={`font-semibold ${
+                      edits.status === "Pending" ||
+                      (!edits.status && o.status === "Pending")
+                        ? "text-orange-500"
+                        : edits.status === "To Be Shipped" ||
+                          (!edits.status && o.status === "To Be Shipped")
+                        ? "text-blue-500"
+                        : edits.status === "Delivered" ||
+                          (!edits.status && o.status === "Delivered")
+                        ? "text-green-600"
+                        : "text-red-500"
+                    }`}
+                  >
+                    {edits.status || o.status}
+                  </span>
+                </p>
+
+                {(isToBeShipped || isDelivered) && (
+                  <p>
+                    To be shipped on:{" "}
+                    <strong>{edits.shippingDay || o.shippingDay}</strong>,{" "}
+                    {new Date(
+                      edits.shippingDate || o.shippingDate
+                    ).toLocaleDateString()}
+                  </p>
+                )}
+              </div>
+
+              <div className="flex flex-col md:flex-row gap-2 items-start md:items-center">
+                {/* Status selector */}
+                <select
+                  value={edits.status || o.status}
+                  onChange={(e) =>
+                    handleOrderEdit(o._id, "status", e.target.value)
+                  }
+                  className="border p-1 rounded"
+                >
+                  <option value="Pending">Pending</option>
+                  <option value="To Be Shipped">To Be Shipped</option>
+                  <option value="Delivered">Delivered</option>
+                  <option value="Cancelled">Cancelled</option>
+                </select>
+
+                {/* Shipping day/date */}
+                {isToBeShipped && (
+                  <div className="flex gap-2 items-center mt-1 md:mt-0">
+                    <select
+                      value={edits.shippingDay || o.shippingDay || ""}
+                      onChange={(e) =>
+                        handleOrderEdit(o._id, "shippingDay", e.target.value)
+                      }
+                      className="border p-1 rounded"
+                    >
+                      <option value="">Select Day</option>
+                      <option value="Tuesday">Tuesday</option>
+                      <option value="Saturday">Saturday</option>
+                    </select>
+                    <input
+                      type="date"
+                      value={
+                        (edits.shippingDate || o.shippingDate)?.split("T")[0] ||
+                        ""
+                      }
+                      onChange={(e) =>
+                        handleOrderEdit(o._id, "shippingDate", e.target.value)
+                      }
+                      className="border p-1 rounded"
+                    />
+                  </div>
+                )}
+
+                {/* Save button */}
+                <button
+                  onClick={() => handleOrderStatusChange(o._id, edits)}
+                  className="bg-green-500 text-white px-2 py-1 rounded hover:bg-green-600 mt-1 md:mt-0"
+                >
+                  Save
+                </button>
+              </div>
+            </div>
+          );
+        })}
       </div>
     </div>
   );

@@ -106,6 +106,12 @@ const Orders = () => {
                     {order.status}
                   </span>
                 </p>
+                {order.shippingDay && order.shippingDate && (
+                  <p className="text-sm text-gray-500">
+                    Scheduled Shipping: {order.shippingDay},{" "}
+                    {new Date(order.shippingDate).toLocaleDateString()}
+                  </p>
+                )}
               </div>
             </div>
 

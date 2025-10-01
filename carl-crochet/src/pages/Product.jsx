@@ -78,6 +78,11 @@ const Product = () => {
             )}
           </p>
 
+          {/* Delivery Info */}
+          <p className="mt-2 text-sm font-medium text-gray-600">
+            Delivery Days: Tuesday & Saturday
+          </p>
+
           {/* Size Selection */}
           <div className="flex flex-col gap-4 my-8">
             <p>Select Size</p>

@@ -22,6 +22,7 @@ jobs:
         run: npm ci
 
       - name: Build frontend
+      
         working-directory: ./carl-crochet
         run: npm run build
 

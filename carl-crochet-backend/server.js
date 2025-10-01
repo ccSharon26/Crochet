@@ -20,10 +20,8 @@ const allowedOrigins = [
 
 app.use(cors({
   origin: function(origin, callback) {
-    // Allow requests with no origin (like Postman or server-to-server)
     if (!origin) return callback(null, true);
 
-    // Allow requests from GH Pages and localhosts
     if (allowedOrigins.some(o => origin.startsWith(o))) {
       return callback(null, true);
     }

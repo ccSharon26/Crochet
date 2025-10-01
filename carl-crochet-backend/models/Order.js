@@ -6,20 +6,27 @@ const orderSchema = new mongoose.Schema({
     name: String,
     email: String,
     phone: String,
-    county: String, 
+    county: String,
     address: String,
   },
   delivery: {
-    name: String,     
-    fee: Number,   
+    name: String,
+    fee: Number,
   },
   total: { type: Number, required: true },
   payment: { type: String, default: "Cash on Delivery" },
   status: {
     type: String,
-    enum: ["Pending", "Processing", "Shipping", "Delivered", "Cancelled"], 
+    enum: ["Pending", "To Be Shipped", "Delivered", "Cancelled"],
     default: "Pending",
   },
+  // ✅ FIXED: no default null, just optional
+  shippingDay: {
+    type: String,
+    enum: ["Tuesday", "Saturday"],
+    required: false,
+  },
+  shippingDate: { type: Date, required: false },
   date: { type: Date, default: Date.now },
 });
 
