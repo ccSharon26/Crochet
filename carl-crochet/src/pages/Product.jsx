@@ -160,11 +160,11 @@ const Product = () => {
           ) : (
             <div className="space-y-4">
               <div>
-                <p className="font-medium">John D.</p>
+                <p className="font-medium">Jonny C.</p>
                 <p>Great product! Exactly as described.</p>
               </div>
               <div>
-                <p className="font-medium">Mary K.</p>
+                <p className="font-medium">Shar K.</p>
                 <p>Good value for money, shipping was fast.</p>
               </div>
               <div>

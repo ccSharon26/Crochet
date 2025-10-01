@@ -20,7 +20,6 @@ const orderSchema = new mongoose.Schema({
     enum: ["Pending", "To Be Shipped", "Delivered", "Cancelled"],
     default: "Pending",
   },
-  // ✅ FIXED: no default null, just optional
   shippingDay: {
     type: String,
     enum: ["Tuesday", "Saturday"],

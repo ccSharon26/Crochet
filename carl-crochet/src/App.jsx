@@ -35,7 +35,6 @@ function App() {
         <Route path="/track-order/:id" element={<TrackOrder />} />
         <Route path="/profile" element={<Profile />} />
         <Route path="/admin" element={<AdminDashboard />} />
-        <Route path="/admin" element={<AdminDashboard />} />
       </Routes>
       <Footer />
     </div>

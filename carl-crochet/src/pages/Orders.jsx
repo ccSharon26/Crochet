@@ -49,7 +49,7 @@ const Orders = () => {
             className="py-6 border-t border-b text-gray-700 flex flex-col gap-6"
           >
             <div className="flex items-start gap-6 text-sm">
-              {/* Show first product in the order */}
+              {/* Shows first product in the order */}
               {Object.keys(order.items).length > 0 && (
                 <img
                   className="w-16 sm:w-20"

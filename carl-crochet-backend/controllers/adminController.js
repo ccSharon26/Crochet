@@ -2,8 +2,7 @@ import Product from "../models/Product.js";
 import Order from "../models/Order.js";
 import { sendEmail } from "../utils/sendEmail.js"; // email utility
 
-// ======== Products ========
-
+        //Products
 // Get all products
 export const getProducts = async (req, res) => {
   try {
@@ -54,8 +53,7 @@ export const updateProduct = async (req, res) => {
   }
 };
 
-// ======== Orders ========
-
+         //  Orders 
 // Get all orders
 export const getOrders = async (req, res) => {
   try {
@@ -78,8 +76,6 @@ export const updateOrderStatus = async (req, res) => {
     const order = await Order.findById(req.params.id);
 
     if (!order) return res.status(404).json({ message: "Order not found" });
-
-    // Track if email should be sent
     let sendEmailFlag = false;
 
     // Update status
