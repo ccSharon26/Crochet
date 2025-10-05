@@ -22,9 +22,14 @@ function App() {
     <>
       <ScrollToTop />
       <div className="w-full min-h-screen flex flex-col bg-gray-50">
-        <Navbar />
-        <SearchBar />
-        <div className="flex-grow">
+        {/* Fixed Navbar */}
+        <div className="fixed top-0 left-0 w-full z-50 bg-white/95 backdrop-blur-sm border-b border-pink-100 shadow-sm">
+          <Navbar />
+        </div>
+
+        <div className="pt-[74px] flex-grow">
+          <SearchBar />
+
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/collection" element={<Collection />} />
@@ -41,6 +46,7 @@ function App() {
             <Route path="/admin" element={<AdminDashboard />} />
           </Routes>
         </div>
+
         <Footer />
       </div>
     </>
