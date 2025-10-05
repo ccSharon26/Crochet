@@ -1,4 +1,4 @@
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, useLocation } from "react-router-dom";
 import Home from "./pages/Home";
 import Collection from "./pages/Collection";
 import About from "./pages/About";
@@ -18,6 +18,8 @@ import AdminDashboard from "./pages/AdminDashboard.jsx";
 import ScrollToTop from "./components/ScrollToTop";
 
 function App() {
+  const location = useLocation(); // <-- get current route
+
   return (
     <>
       <ScrollToTop />
@@ -47,7 +49,8 @@ function App() {
           </Routes>
         </div>
 
-        <Footer />
+        {/* Render Footer only if NOT on /contact */}
+        {location.pathname !== "/contact" && <Footer />}
       </div>
     </>
   );
