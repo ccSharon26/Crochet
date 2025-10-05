@@ -2,7 +2,7 @@ import Title from "../components/Title";
 
 const About = () => {
   return (
-    <div>
+    <div className="px-6 md:px-20 py-10">
       {/* ABOUT SECTION */}
       <div className="text-2xl text-center pt-10 border-t">
         <Title text1={"ABOUT"} text2={"US"} />
