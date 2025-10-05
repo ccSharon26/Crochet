@@ -29,7 +29,7 @@ const Orders = () => {
 
   if (orders.length === 0) {
     return (
-      <div className="p-6 text-center">
+      <div className="px-6 md:px-20 py-10 text-center">
         <h2 className="text-xl font-semibold">No orders yet</h2>
         <p className="text-gray-500">Place your first order to see it here.</p>
       </div>
@@ -37,12 +37,12 @@ const Orders = () => {
   }
 
   return (
-    <div className="border-t pt-16">
-      <div className="text-2xl">
+    <div className="px-6 md:px-20 py-10 border-t">
+      <div className="text-2xl mb-6">
         <Title text1={"MY"} text2={"ORDERS"} />
       </div>
 
-      <div>
+      <div className="flex flex-col gap-6">
         {orders.map((order) => (
           <div
             key={order._id}
