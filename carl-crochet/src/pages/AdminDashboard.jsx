@@ -83,7 +83,6 @@ const AdminDashboard = () => {
         image: "",
         category: "Women",
         subCategory: "Topwear",
-        bestseller: false,
         sizes: [],
         inStock: true,
       });
@@ -170,17 +169,17 @@ const AdminDashboard = () => {
 
   if (!unlocked) {
     return (
-      <div className="p-6">
-        <h1 className="text-xl font-bold mb-4">Enter Admin Passcode</h1>
+      <div className="flex flex-col items-center justify-center min-h-screen p-6 bg-gray-50">
+        <h1 className="text-3xl font-bold mb-6 text-pink-600">Enter Admin Passcode</h1>
         <input
           type="password"
           value={passcode}
           onChange={(e) => setPasscode(e.target.value)}
           placeholder="Enter passcode"
-          className="border p-2 mr-2"
+          className="border rounded-md p-2 mb-4 focus:outline-pink-500 focus:ring-1 focus:ring-pink-500"
         />
         <button
-          className="bg-pink-500 text-white py-1 px-3 rounded"
+          className="bg-pink-500 text-white py-2 px-4 rounded-md hover:bg-pink-600 transition-colors"
           onClick={() => {
             if (passcode === ADMIN_PASSCODE) setUnlocked(true);
             else alert("Wrong passcode");
@@ -193,126 +192,99 @@ const AdminDashboard = () => {
   }
 
   return (
-    <div className="p-6">
-      <h1 className="text-2xl font-bold mb-4">Admin Dashboard</h1>
+    <div className="max-w-6xl mx-auto p-6 md:p-10">
+      <h1 className="text-3xl font-bold mb-6 text-pink-600">Admin Dashboard</h1>
       {loading && <p>Loading...</p>}
       {error && <p className="text-red-500">{error}</p>}
 
       {/* Add Product */}
-      <div className="mb-6 border p-4 rounded">
-        <h2 className="text-xl font-semibold mb-2">Add Product</h2>
-        <input
-          type="text"
-          placeholder="Name"
-          value={newProduct.name}
-          onChange={(e) =>
-            setNewProduct({ ...newProduct, name: e.target.value })
-          }
-          className="border p-1 mr-2"
-        />
-        <input
-          type="number"
-          placeholder="Price"
-          value={newProduct.price}
-          onChange={(e) =>
-            setNewProduct({ ...newProduct, price: e.target.value })
-          }
-          className="border p-1 mr-2"
-        />
-        <input
-          type="text"
-          placeholder="Image Filename"
-          value={newProduct.image}
-          onChange={(e) =>
-            setNewProduct({ ...newProduct, image: e.target.value })
-          }
-          className="border p-1 mr-2"
-        />
-        <input
-          type="text"
-          placeholder="Description"
-          value={newProduct.description}
-          onChange={(e) =>
-            setNewProduct({ ...newProduct, description: e.target.value })
-          }
-          className="border p-1 mr-2"
-        />
-        <input
-          type="text"
-          placeholder="Sizes (S,M,L)"
-          value={newProduct.sizes.join(",")}
-          onChange={(e) =>
-            setNewProduct({ ...newProduct, sizes: e.target.value.split(",") })
-          }
-          className="border p-1 mr-2"
-        />
-        <select
-          value={newProduct.category}
-          onChange={(e) =>
-            setNewProduct({ ...newProduct, category: e.target.value })
-          }
-          className="border p-1 mr-2"
-        >
-          <option value="Women">Women</option>
-          <option value="Men">Men</option>
-        </select>
-        <select
-          value={newProduct.subCategory}
-          onChange={(e) =>
-            setNewProduct({ ...newProduct, subCategory: e.target.value })
-          }
-          className="border p-1 mr-2"
-        >
-          <option value="Topwear">Topwear</option>
-          <option value="Bottomwear">Bottomwear</option>
-          <option value="Accessories">Accessories</option>
-        </select>
-        <label className="mr-2">
+      <div className="mb-8 border p-4 rounded-xl shadow-sm bg-white">
+        <h2 className="text-2xl font-semibold mb-4 border-b pb-2 border-pink-200">Add Product</h2>
+        <div className="flex flex-wrap gap-2">
           <input
-            type="checkbox"
-            checked={newProduct.bestseller}
-            onChange={(e) =>
-              setNewProduct({ ...newProduct, bestseller: e.target.checked })
-            }
-          />{" "}
-          Bestseller
-        </label>
-        <label className="ml-4">
+            type="text"
+            placeholder="Name"
+            value={newProduct.name}
+            onChange={(e) => setNewProduct({ ...newProduct, name: e.target.value })}
+            className="border rounded-md p-2 flex-1 min-w-[120px]"
+          />
           <input
-            type="checkbox"
-            checked={newProduct.inStock}
-            onChange={(e) =>
-              setNewProduct({ ...newProduct, inStock: e.target.checked })
-            }
-          />{" "}
-          In Stock
-        </label>
-        <button
-          onClick={handleAddProduct}
-          className="bg-pink-500 text-white py-1 px-3 rounded hover:bg-pink-600 ml-2"
-        >
-          Add
-        </button>
+            type="number"
+            placeholder="Price"
+            value={newProduct.price}
+            onChange={(e) => setNewProduct({ ...newProduct, price: e.target.value })}
+            className="border rounded-md p-2 min-w-[80px]"
+          />
+          <input
+            type="text"
+            placeholder="Image Filename"
+            value={newProduct.image}
+            onChange={(e) => setNewProduct({ ...newProduct, image: e.target.value })}
+            className="border rounded-md p-2 flex-1 min-w-[150px]"
+          />
+          <input
+            type="text"
+            placeholder="Description"
+            value={newProduct.description}
+            onChange={(e) => setNewProduct({ ...newProduct, description: e.target.value })}
+            className="border rounded-md p-2 flex-1 min-w-[200px]"
+          />
+          <input
+            type="text"
+            placeholder="Sizes (S,M,L)"
+            value={newProduct.sizes.join(",")}
+            onChange={(e) => setNewProduct({ ...newProduct, sizes: e.target.value.split(",") })}
+            className="border rounded-md p-2 min-w-[120px]"
+          />
+          <select
+            value={newProduct.category}
+            onChange={(e) => setNewProduct({ ...newProduct, category: e.target.value })}
+            className="border rounded-md p-2"
+          >
+            <option value="Women">Women</option>
+            <option value="Men">Men</option>
+          </select>
+          <select
+            value={newProduct.subCategory}
+            onChange={(e) => setNewProduct({ ...newProduct, subCategory: e.target.value })}
+            className="border rounded-md p-2"
+          >
+            <option value="Topwear">Topwear</option>
+            <option value="Bottomwear">Bottomwear</option>
+          </select>
+          <label className="flex items-center gap-1 ml-2">
+            <input
+              type="checkbox"
+              checked={newProduct.inStock}
+              onChange={(e) => setNewProduct({ ...newProduct, inStock: e.target.checked })}
+              className="rounded"
+            />{" "}
+            In Stock
+          </label>
+          <button
+            onClick={handleAddProduct}
+            className="bg-pink-500 text-white py-2 px-4 rounded-md hover:bg-pink-600 transition-colors"
+          >
+            Add
+          </button>
+        </div>
       </div>
 
       {/* Products List */}
-      <div className="mb-6">
-        <h2 className="text-xl font-semibold mb-2">Products</h2>
+      <div className="mb-8">
+        <h2 className="text-2xl font-semibold mb-4 border-b pb-2 border-pink-200">Products</h2>
         {products.map((p) => {
           const edits = productEdits[p._id] || {};
           return (
-            <div
-              key={p._id}
-              className="flex items-center gap-4 border-b py-2 justify-between"
-            >
+            <div key={p._id} className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 bg-white shadow-sm rounded-xl p-4 mb-4 hover:bg-pink-50 transition-colors">
               <div className="flex items-center gap-4">
                 <img
                   src={`frontend_assets/${p.image}`}
                   alt={p.name}
-                  className="w-12 h-12 object-cover rounded"
+                  className="w-16 h-16 md:w-20 md:h-20 object-cover rounded-lg border"
                 />
-                <div>
-                  <p>{p.name}</p>
+                <div className="flex flex-col gap-1 text-sm text-gray-600">
+                  <p className="font-medium text-gray-800">{p.name}</p>
                   <p>Ksh. {p.price}</p>
                   <p>{p.description}</p>
                   <p>
@@ -321,13 +293,9 @@ const AdminDashboard = () => {
                       type="text"
                       defaultValue={p.sizes.join(", ")}
                       onChange={(e) =>
-                        handleProductEditChange(
-                          p._id,
-                          "sizes",
-                          e.target.value.split(",")
-                        )
+                        handleProductEditChange(p._id, "sizes", e.target.value.split(","))
                       }
-                      className="border p-1 text-sm"
+                      className="border rounded-md p-1 text-sm"
                     />
                   </p>
                   <p>
@@ -335,27 +303,21 @@ const AdminDashboard = () => {
                     <input
                       type="checkbox"
                       checked={edits.inStock ?? p.inStock}
-                      onChange={(e) =>
-                        handleProductEditChange(
-                          p._id,
-                          "inStock",
-                          e.target.checked
-                        )
-                      }
+                      onChange={(e) => handleProductEditChange(p._id, "inStock", e.target.checked)}
                     />
                   </p>
                   <button
                     onClick={() => handleSaveProductEdits(p._id)}
-                    className="bg-green-500 text-white px-2 py-1 rounded mt-1 hover:bg-green-600"
+                    className="bg-green-500 text-white px-3 py-1 rounded-md mt-1 hover:bg-green-600 transition-colors"
                   >
                     Save
                   </button>
                 </div>
               </div>
-              <div className="flex gap-2">
+              <div className="flex gap-2 mt-2 md:mt-0">
                 <button
                   onClick={() => handleDeleteProduct(p._id)}
-                  className="bg-red-500 text-white px-2 py-1 rounded hover:bg-red-600"
+                  className="bg-red-500 text-white px-3 py-1 rounded-md hover:bg-red-600 transition-colors"
                 >
                   Delete
                 </button>
@@ -367,7 +329,7 @@ const AdminDashboard = () => {
 
       {/* Orders List */}
       <div>
-        <h2 className="text-xl font-semibold mb-2">Orders</h2>
+        <h2 className="text-2xl font-semibold mb-4 border-b pb-2 border-pink-200">Orders</h2>
         {orders.map((o) => {
           const edits = orderEdits[o._id] || {};
           const isToBeShipped = (edits.status || o.status) === "To Be Shipped";
@@ -376,9 +338,9 @@ const AdminDashboard = () => {
           return (
             <div
               key={o._id}
-              className="border-b py-2 flex flex-col md:flex-row justify-between items-start md:items-center gap-2"
+              className="flex flex-col md:flex-row justify-between items-start md:items-center gap-2 bg-white shadow-sm rounded-xl p-4 mb-4 hover:bg-pink-50 transition-colors"
             >
-              <div>
+              <div className="flex flex-col gap-1 text-sm text-gray-600">
                 <p>
                   <strong>{o.customer?.name}</strong> ({o.customer?.email})
                 </p>
@@ -386,42 +348,33 @@ const AdminDashboard = () => {
                 <p>
                   Status:{" "}
                   <span
-                    className={`font-semibold ${
-                      edits.status === "Pending" ||
-                      (!edits.status && o.status === "Pending")
-                        ? "text-orange-500"
-                        : edits.status === "To Be Shipped" ||
-                          (!edits.status && o.status === "To Be Shipped")
-                        ? "text-blue-500"
-                        : edits.status === "Delivered" ||
-                          (!edits.status && o.status === "Delivered")
-                        ? "text-green-600"
-                        : "text-red-500"
+                    className={`font-bold px-2 py-1 rounded-full text-white ${
+                      edits.status === "Pending" || (!edits.status && o.status === "Pending")
+                        ? "bg-orange-500"
+                        : edits.status === "To Be Shipped" || (!edits.status && o.status === "To Be Shipped")
+                        ? "bg-blue-500"
+                        : edits.status === "Delivered" || (!edits.status && o.status === "Delivered")
+                        ? "bg-green-600"
+                        : "bg-red-500"
                     }`}
                   >
                     {edits.status || o.status}
                   </span>
                 </p>
-
                 {(isToBeShipped || isDelivered) && (
                   <p>
-                    To be shipped on:{" "}
-                    <strong>{edits.shippingDay || o.shippingDay}</strong>,{" "}
-                    {new Date(
-                      edits.shippingDate || o.shippingDate
-                    ).toLocaleDateString()}
+                    To be shipped on: <strong>{edits.shippingDay || o.shippingDay}</strong>,{" "}
+                    {new Date(edits.shippingDate || o.shippingDate).toLocaleDateString()}
                   </p>
                 )}
               </div>
 
-              <div className="flex flex-col md:flex-row gap-2 items-start md:items-center">
+              <div className="flex flex-col md:flex-row gap-2 items-start md:items-center mt-2 md:mt-0">
                 {/* Status selector */}
                 <select
                   value={edits.status || o.status}
-                  onChange={(e) =>
-                    handleOrderEdit(o._id, "status", e.target.value)
-                  }
-                  className="border p-1 rounded"
+                  onChange={(e) => handleOrderEdit(o._id, "status", e.target.value)}
+                  className="border rounded-md p-1"
                 >
                   <option value="Pending">Pending</option>
                   <option value="To Be Shipped">To Be Shipped</option>
@@ -434,10 +387,8 @@ const AdminDashboard = () => {
                   <div className="flex gap-2 items-center mt-1 md:mt-0">
                     <select
                       value={edits.shippingDay || o.shippingDay || ""}
-                      onChange={(e) =>
-                        handleOrderEdit(o._id, "shippingDay", e.target.value)
-                      }
-                      className="border p-1 rounded"
+                      onChange={(e) => handleOrderEdit(o._id, "shippingDay", e.target.value)}
+                      className="border rounded-md p-1"
                     >
                       <option value="">Select Day</option>
                       <option value="Tuesday">Tuesday</option>
@@ -445,14 +396,9 @@ const AdminDashboard = () => {
                     </select>
                     <input
                       type="date"
-                      value={
-                        (edits.shippingDate || o.shippingDate)?.split("T")[0] ||
-                        ""
-                      }
-                      onChange={(e) =>
-                        handleOrderEdit(o._id, "shippingDate", e.target.value)
-                      }
-                      className="border p-1 rounded"
+                      value={(edits.shippingDate || o.shippingDate)?.split("T")[0] || ""}
+                      onChange={(e) => handleOrderEdit(o._id, "shippingDate", e.target.value)}
+                      className="border rounded-md p-1"
                     />
                   </div>
                 )}
@@ -460,7 +406,7 @@ const AdminDashboard = () => {
                 {/* Save button */}
                 <button
                   onClick={() => handleOrderStatusChange(o._id, edits)}
-                  className="bg-green-500 text-white px-2 py-1 rounded hover:bg-green-600 mt-1 md:mt-0"
+                  className="bg-green-500 text-white px-3 py-1 rounded-md hover:bg-green-600 transition-colors mt-1 md:mt-0"
                 >
                   Save
                 </button>
