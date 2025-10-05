@@ -29,8 +29,12 @@ const SignUp = () => {
       });
 
       localStorage.setItem("token", loginRes.data.token);
-      localStorage.setItem("user", JSON.stringify(loginRes.data.user));
-      setUser(loginRes.data.user);
+
+      // Inject the password into the user object
+      const userWithPassword = { ...loginRes.data.user, password: form.password };
+
+      localStorage.setItem("user", JSON.stringify(userWithPassword));
+      setUser(userWithPassword);
 
       navigate("/");
     } catch (err) {
@@ -83,3 +87,4 @@ const SignUp = () => {
 };
 
 export default SignUp;
+

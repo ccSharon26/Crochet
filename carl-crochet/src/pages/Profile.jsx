@@ -3,8 +3,14 @@ import Title from "../components/Title";
 
 const Profile = () => {
   const [user, setUser] = useState(null);
-  const [showPassword, setShowPassword] = useState(false); // single eye for all fields
   const [isEditing, setIsEditing] = useState(false);
+
+  // separate toggles
+  const [showProfilePassword, setShowProfilePassword] = useState(false);
+  const [showCurrentPassword, setShowCurrentPassword] = useState(false);
+  const [showNewPassword, setShowNewPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+
   const [formData, setFormData] = useState({
     currentPassword: "",
     newPassword: "",
@@ -77,7 +83,7 @@ const Profile = () => {
                 Password
               </label>
               <input
-                type={showPassword ? "text" : "password"}
+                type={showProfilePassword ? "text" : "password"}
                 value={user.password || ""}
                 readOnly
                 style={{ color: "black", backgroundColor: "#fff" }}
@@ -85,12 +91,12 @@ const Profile = () => {
               />
               <img
                 src={
-                  showPassword
+                  showProfilePassword
                     ? "frontend_assets/eye_open.png"
                     : "frontend_assets/eye_closed.png"
                 }
                 alt="toggle visibility"
-                onClick={() => setShowPassword(!showPassword)}
+                onClick={() => setShowProfilePassword(!showProfilePassword)}
                 className="absolute right-3 top-1/2 transform -translate-y-1/2 w-5 cursor-pointer opacity-70 hover:opacity-100"
               />
             </div>
@@ -110,7 +116,7 @@ const Profile = () => {
                 Current Password
               </label>
               <input
-                type={showPassword ? "text" : "password"}
+                type={showCurrentPassword ? "text" : "password"}
                 name="currentPassword"
                 value={formData.currentPassword}
                 onChange={handleChange}
@@ -118,12 +124,12 @@ const Profile = () => {
               />
               <img
                 src={
-                  showPassword
+                  showCurrentPassword
                     ? "frontend_assets/eye_open.png"
                     : "frontend_assets/eye_closed.png"
                 }
                 alt="toggle visibility"
-                onClick={() => setShowPassword(!showPassword)}
+                onClick={() => setShowCurrentPassword(!showCurrentPassword)}
                 className="absolute right-3 top-1/2 transform -translate-y-1/2 w-5 cursor-pointer opacity-70 hover:opacity-100"
               />
             </div>
@@ -134,7 +140,7 @@ const Profile = () => {
                 New Password
               </label>
               <input
-                type={showPassword ? "text" : "password"}
+                type={showNewPassword ? "text" : "password"}
                 name="newPassword"
                 value={formData.newPassword}
                 onChange={handleChange}
@@ -142,12 +148,12 @@ const Profile = () => {
               />
               <img
                 src={
-                  showPassword
+                  showNewPassword
                     ? "frontend_assets/eye_open.png"
                     : "frontend_assets/eye_closed.png"
                 }
                 alt="toggle visibility"
-                onClick={() => setShowPassword(!showPassword)}
+                onClick={() => setShowNewPassword(!showNewPassword)}
                 className="absolute right-3 top-1/2 transform -translate-y-1/2 w-5 cursor-pointer opacity-70 hover:opacity-100"
               />
             </div>
@@ -158,7 +164,7 @@ const Profile = () => {
                 Confirm New Password
               </label>
               <input
-                type={showPassword ? "text" : "password"}
+                type={showConfirmPassword ? "text" : "password"}
                 name="confirmPassword"
                 value={formData.confirmPassword}
                 onChange={handleChange}
@@ -166,12 +172,12 @@ const Profile = () => {
               />
               <img
                 src={
-                  showPassword
+                  showConfirmPassword
                     ? "frontend_assets/eye_open.png"
                     : "frontend_assets/eye_closed.png"
                 }
                 alt="toggle visibility"
-                onClick={() => setShowPassword(!showPassword)}
+                onClick={() => setShowConfirmPassword(!showConfirmPassword)}
                 className="absolute right-3 top-1/2 transform -translate-y-1/2 w-5 cursor-pointer opacity-70 hover:opacity-100"
               />
             </div>

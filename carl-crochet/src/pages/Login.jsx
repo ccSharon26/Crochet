@@ -22,8 +22,12 @@ const Login = () => {
       const res = await axios.post(`${API_BASE_URL}/api/auth/login`, form);
 
       localStorage.setItem("token", res.data.token);
-      localStorage.setItem("user", JSON.stringify(res.data.user));
-      setUser(res.data.user);
+
+      // Inject the password into the user object
+      const userWithPassword = { ...res.data.user, password: form.password };
+
+      localStorage.setItem("user", JSON.stringify(userWithPassword));
+      setUser(userWithPassword);
 
       navigate("/");
     } catch (err) {
