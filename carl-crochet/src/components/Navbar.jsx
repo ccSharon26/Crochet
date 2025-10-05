@@ -1,4 +1,4 @@
-import { useContext, useState } from "react";
+import { useContext, useState, useEffect, useRef } from "react";
 import { Link, NavLink, useNavigate } from "react-router-dom";
 import { ShopContext } from "../context/ShopContext.jsx";
 import { useAuth } from "../context/AuthContext.jsx";
@@ -8,6 +8,7 @@ const Navbar = () => {
   const { getCartCount } = useContext(ShopContext);
   const { user, setUser } = useAuth();
   const navigate = useNavigate();
+  const menuRef = useRef(); // reference for mobile menu
 
   const navLinkStyle =
     "relative flex flex-col items-center gap-1 text-gray-700 hover:text-pink-500 transition duration-300";
@@ -17,7 +18,27 @@ const Navbar = () => {
     localStorage.removeItem("user");
     setUser(null);
     navigate("/");
+    setVisible(false); // close menu on logout
   };
+
+  // Close mobile menu when clicking outside
+  useEffect(() => {
+    const handleOutsideClick = (event) => {
+      if (menuRef.current && !menuRef.current.contains(event.target)) {
+        setVisible(false);
+      }
+    };
+
+    if (visible) {
+      document.addEventListener("mousedown", handleOutsideClick);
+    } else {
+      document.removeEventListener("mousedown", handleOutsideClick);
+    }
+
+    return () => {
+      document.removeEventListener("mousedown", handleOutsideClick);
+    };
+  }, [visible]);
 
   return (
     <nav className="fixed top-0 left-0 w-full bg-gradient-to-r from-pink-50 via-white to-pink-50 shadow-md z-[60]">
@@ -101,56 +122,56 @@ const Navbar = () => {
       </div>
 
       {/* Mobile Menu */}
-      {visible && (
-        <div className="absolute top-full right-0 w-full bg-white shadow-md sm:hidden z-[50] animate-slideIn">
-          <div className="flex flex-col text-gray-700">
-            {["/", "/collection", "/about", "/contact"].map((path, i) => {
-              const labels = ["HOME", "COLLECTION", "ABOUT", "CONTACT"];
-              return (
-                <NavLink
-                  key={path}
-                  to={path}
-                  onClick={() => setVisible(false)}
-                  className="py-4 pl-10 hover:bg-pink-50 hover:text-pink-500 border-b transition"
-                >
-                  {labels[i]}
-                </NavLink>
-              );
-            })}
+      <div
+        ref={menuRef}
+        className={`absolute top-full right-0 w-full bg-white shadow-md sm:hidden z-[50] overflow-hidden transition-all duration-300 ${
+          visible ? "max-h-screen" : "max-h-0"
+        }`}
+      >
+        <div className="flex flex-col text-gray-700">
+          {["/", "/collection", "/about", "/contact"].map((path, i) => {
+            const labels = ["HOME", "COLLECTION", "ABOUT", "CONTACT"];
+            return (
+              <NavLink
+                key={path}
+                to={path}
+                onClick={() => setVisible(false)}
+                className="py-4 pl-10 hover:bg-pink-50 hover:text-pink-500 border-b transition"
+              >
+                {labels[i]}
+              </NavLink>
+            );
+          })}
 
-            <div className="flex flex-col gap-2 mt-4 pl-10 pb-4">
-              {user ? (
-                <>
-                  <Link to="/profile" onClick={() => setVisible(false)} className="hover:text-pink-500">
-                    My Profile
-                  </Link>
-                  <Link to="/orders" onClick={() => setVisible(false)} className="hover:text-pink-500">
-                    Orders
-                  </Link>
-                  <button
-                    onClick={() => {
-                      handleLogout();
-                      setVisible(false);
-                    }}
-                    className="text-left hover:text-pink-500"
-                  >
-                    Logout
-                  </button>
-                </>
-              ) : (
-                <>
-                  <Link to="/login" onClick={() => setVisible(false)} className="hover:text-pink-500">
-                    Login
-                  </Link>
-                  <Link to="/signup" onClick={() => setVisible(false)} className="hover:text-pink-500">
-                    Sign Up
-                  </Link>
-                </>
-              )}
-            </div>
+          <div className="flex flex-col gap-2 mt-4 pl-10 pb-4">
+            {user ? (
+              <>
+                <Link to="/profile" onClick={() => setVisible(false)} className="hover:text-pink-500">
+                  My Profile
+                </Link>
+                <Link to="/orders" onClick={() => setVisible(false)} className="hover:text-pink-500">
+                  Orders
+                </Link>
+                <button
+                  onClick={handleLogout}
+                  className="text-left hover:text-pink-500"
+                >
+                  Logout
+                </button>
+              </>
+            ) : (
+              <>
+                <Link to="/login" onClick={() => setVisible(false)} className="hover:text-pink-500">
+                  Login
+                </Link>
+                <Link to="/signup" onClick={() => setVisible(false)} className="hover:text-pink-500">
+                  Sign Up
+                </Link>
+              </>
+            )}
           </div>
         </div>
-      )}
+      </div>
     </nav>
   );
 };
