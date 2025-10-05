@@ -1,4 +1,4 @@
-import { Route, Routes } from "react-router-dom";
+import { Routes, Route } from "react-router-dom";
 import Home from "./pages/Home";
 import Collection from "./pages/Collection";
 import About from "./pages/About";
@@ -15,29 +15,35 @@ import TrackOrder from "./pages/TrackOrder";
 import SignUp from "./pages/SignUp";
 import Profile from "./pages/Profile";
 import AdminDashboard from "./pages/AdminDashboard.jsx";
+import ScrollToTop from "./components/ScrollToTop";
 
 function App() {
   return (
-    <div className="px-4 sm:px-[5vw] md:px-[7vw] lg:px-[9vw]">
-      <Navbar />
-      <SearchBar />
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/collection" element={<Collection />} />
-        <Route path="/about" element={<About />} />
-        <Route path="/contact" element={<Contact />} />
-        <Route path="/product/:productId" element={<Product />} />
-        <Route path="/cart" element={<Cart />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/signup" element={<SignUp />} />
-        <Route path="/place-order" element={<PlaceOrder />} />
-        <Route path="/orders" element={<Orders />} />
-        <Route path="/track-order/:id" element={<TrackOrder />} />
-        <Route path="/profile" element={<Profile />} />
-        <Route path="/admin" element={<AdminDashboard />} />
-      </Routes>
-      <Footer />
-    </div>
+    <>
+      <ScrollToTop />
+      <div className="w-full min-h-screen flex flex-col bg-gray-50">
+        <Navbar />
+        <SearchBar />
+        <div className="flex-grow">
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/collection" element={<Collection />} />
+            <Route path="/about" element={<About />} />
+            <Route path="/contact" element={<Contact />} />
+            <Route path="/product/:productId" element={<Product />} />
+            <Route path="/cart" element={<Cart />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/signup" element={<SignUp />} />
+            <Route path="/place-order" element={<PlaceOrder />} />
+            <Route path="/orders" element={<Orders />} />
+            <Route path="/track-order/:id" element={<TrackOrder />} />
+            <Route path="/profile" element={<Profile />} />
+            <Route path="/admin" element={<AdminDashboard />} />
+          </Routes>
+        </div>
+        <Footer />
+      </div>
+    </>
   );
 }
 

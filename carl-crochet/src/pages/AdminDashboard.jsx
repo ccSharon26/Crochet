@@ -255,7 +255,6 @@ const AdminDashboard = () => {
         >
           <option value="Women">Women</option>
           <option value="Men">Men</option>
-          <option value="Kids">Kids</option>
         </select>
         <select
           value={newProduct.subCategory}

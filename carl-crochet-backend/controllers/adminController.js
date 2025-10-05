@@ -53,7 +53,7 @@ export const updateProduct = async (req, res) => {
   }
 };
 
-         //  Orders 
+ //  Orders 
 // Get all orders
 export const getOrders = async (req, res) => {
   try {

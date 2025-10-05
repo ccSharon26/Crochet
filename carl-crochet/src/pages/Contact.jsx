@@ -17,7 +17,7 @@ const Contact = () => {
         <div className="flex flex-col justify-center items-start gap-6">
           <p className="font-semibold text-xl text-gray-700">We’d love to hear from you!</p>
           <p className="text-gray-600">
-            Reach us directly through phone, email, or social media.
+            Reach us directly through phone, email, or social media. We’ll get back to you as soon as possible.
           </p>
 
           {/* Contact Info */}
@@ -30,10 +30,10 @@ const Contact = () => {
           <div>
             <p className="font-semibold text-lg text-gray-700 mb-2">Follow Us</p>
             <ul className="space-y-1 text-gray-600">
-              <li>📸 Instagram: <a href="https://instagram.com/carlcrochet" target="_blank" className="text-blue-600 hover:underline">@carlcrochet</a></li>
-              <li>📘 Facebook: <a href="https://facebook.com/carlcrochet" target="_blank" className="text-blue-600 hover:underline">Carl Crochet</a></li>
-              <li>🐦 Twitter: <a href="https://twitter.com/carlcrochet" target="_blank" className="text-blue-600 hover:underline">@carlcrochet</a></li>
-              <li>🎵 TikTok: <a href="https://tiktok.com/@carlcrochet" target="_blank" className="text-blue-600 hover:underline">@carlcrochet</a></li>
+              <li>📸 Instagram: <a href="https://instagram.com/carlcrochet" target="_blank" rel="noreferrer" className="text-blue-600 hover:underline">@carlcrochet</a></li>
+              <li>📘 Facebook: <a href="https://facebook.com/carlcrochet" target="_blank" rel="noreferrer" className="text-blue-600 hover:underline">Carl Crochet</a></li>
+              <li>🐦 Twitter: <a href="https://twitter.com/carlcrochet" target="_blank" rel="noreferrer" className="text-blue-600 hover:underline">@carlcrochet</a></li>
+              <li>🎵 TikTok: <a href="https://tiktok.com/@carlcrochet" target="_blank" rel="noreferrer" className="text-blue-600 hover:underline">@carlcrochet</a></li>
             </ul>
           </div>
         </div>
