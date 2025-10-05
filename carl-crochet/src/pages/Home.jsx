@@ -2,6 +2,7 @@ import { useContext, useEffect, useState } from "react";
 import { ShopContext } from "../context/ShopContext";
 import ProductItem from "../components/ProductItem";
 
+
 const Home = () => {
   const { products } = useContext(ShopContext);
   const [filteredProducts, setFilteredProducts] = useState([]);

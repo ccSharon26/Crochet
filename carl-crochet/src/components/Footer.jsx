@@ -33,19 +33,29 @@ const Footer = () => {
         <div>
           <p className="text-xl font-medium mb-5">GET IN TOUCH</p>
           <ul className="flex flex-col gap-2 text-gray-600">
-            <li>📞 +254 712 345 678</li>
-            <li>📧 carlcrochet@gmail.com</li>
-            <li>
-              📸 <a href="https://instagram.com/carlcrochet" target="_blank" rel="noopener noreferrer" className="hover:text-pink-600">@carlcrochet</a>
+            <li className="flex items-center gap-2">
+              <img src="frontend_assets/phone.png" alt="Phone" className="w-4 h-4" />
+              +254 712 345 678
             </li>
-            <li>
-              📘 <a href="https://facebook.com/carlcrochet" target="_blank" rel="noopener noreferrer" className="hover:text-pink-600">Carl Crochet</a>
+            <li className="flex items-center gap-2">
+              <img src="frontend_assets/email.png" alt="Email" className="w-4 h-4" />
+              carlcrochet@gmail.com
             </li>
-            <li>
-              🐦 <a href="https://twitter.com/carlcrochet" target="_blank" rel="noopener noreferrer" className="hover:text-pink-600">@carlcrochet</a>
+            <li className="flex items-center gap-2">
+              <img src="frontend_assets/instagram.png" alt="Instagram" className="w-4 h-4" />
+              <a href="https://instagram.com/carlcrochet" target="_blank" rel="noopener noreferrer" className="hover:text-pink-600">@carlcrochet</a>
             </li>
-            <li>
-              🎵 <a href="https://tiktok.com/@carlcrochet" target="_blank" rel="noopener noreferrer" className="hover:text-pink-600">@carlcrochet</a>
+            <li className="flex items-center gap-2">
+              <img src="frontend_assets/facebook.png" alt="Facebook" className="w-4 h-4" />
+              <a href="https://facebook.com/carlcrochet" target="_blank" rel="noopener noreferrer" className="hover:text-pink-600">Carl Crochet</a>
+            </li>
+            <li className="flex items-center gap-2">
+              <img src="frontend_assets/twitter.png" alt="Twitter" className="w-4 h-4" />
+              <a href="https://twitter.com/carlcrochet" target="_blank" rel="noopener noreferrer" className="hover:text-pink-600">@carlcrochet</a>
+            </li>
+            <li className="flex items-center gap-2">
+              <img src="frontend_assets/tiktok.png" alt="TikTok" className="w-4 h-4" />
+              <a href="https://tiktok.com/@carlcrochet" target="_blank" rel="noopener noreferrer" className="hover:text-pink-600">@carlcrochet</a>
             </li>
           </ul>
         </div>
